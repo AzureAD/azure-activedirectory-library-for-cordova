@@ -495,6 +495,41 @@ var __extends = this.__extends || function (d, b) {
 })(module.exports);
 
 /**
+ * Pads a string at the right to specified length with specified string
+ *
+ * @param  {String} str Input string to be padded
+ *
+ * @param  {Number} n   Resulting length
+ *
+ * @param  {String} pad String to pad with
+ *
+ * @return {String}     Right-padded string
+ */
+function padRight(str, n, pad) {
+    var temp = str;
+
+    if (n > str.length) {
+        for (var i = 0; i < n - str.length; i++) {
+            temp += pad;
+        }
+    }
+
+    return temp;
+}
+
+/**
+ * Converts Base64URL to Base64 encoded string
+ *
+ * @param  {String} jwt Base64URL encoded string
+ *
+ * @return {String}     Base64 encoded string with applied '=' right padding
+ */
+function base64UrlToBase64(b64Url) {
+    b64Url = padRight(b64Url, b64Url.length + (4 - b64Url.length % 4) % 4, '=');
+    return b64Url.replace(/-/g, '+').replace(/_/g, '/');
+}
+
+/**
  * Parses a valid JWT token into JSON representation.
  * This method doesn't validate/encode token.
  *
@@ -512,6 +547,7 @@ function parseJWT (jwt) {
     }
 
     var jwtBody = jwtParts[1];
+    jwtBody = base64UrlToBase64(jwtBody);
 
     try {
         return JSON.parse(window.atob(jwtBody));
