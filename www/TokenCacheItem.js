@@ -11,7 +11,11 @@ function TokenCacheItem(cacheItem) {
 
     cacheItem = cacheItem || {};
 
-    this.accessToken = cacheItem.accessToken;
+    // 'accessToken' getter throws Incorrect reference ArgumentNullException occassionally
+    try {
+        this.accessToken = cacheItem.accessToken;
+    } catch (e) { } 
+
     this.authority = cacheItem.authority;
     this.clientId = cacheItem.clientId;
     this.displayableId = cacheItem.displayableId;
