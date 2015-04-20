@@ -244,15 +244,17 @@ module.exports.defineAutoTests = function () {
                 done();
             };
 
+            var initialLength;
+
             cache.readItems().then(function (cacheItems) {
                 var item = cacheItems[0];
-                var initialLength = cacheItems.length;
-                cache.deleteItem(item).then(function () {
-                    cache.readItems().then(function (cacheItems) {
-                        expect(cacheItems.length).toEqual(initialLength - 1);
-                        done();
-                    }, fail);
-                }, fail);
+                initialLength = cacheItems.length;
+                return cache.deleteItem(item);
+            }, fail).then(function () {
+                return cache.readItems();
+            }, fail).then(function (cacheItems) {
+                expect(cacheItems.length).toEqual(initialLength - 1);
+                done();
             }, fail);
         });
 
@@ -264,12 +266,12 @@ module.exports.defineAutoTests = function () {
             };
 
             cache.readItems().then(function () {
-                cache.clear().then(function () {
-                    cache.readItems().then(function (cacheItems) {
-                        expect(cacheItems.length).toEqual(0);
-                        done();
-                    }, fail);
-                }, fail);
+                return cache.clear();
+            }, fail).then(function () {
+                return cache.readItems();
+            }, fail).then(function (cacheItems) {
+                expect(cacheItems.length).toEqual(0);
+                done();
             }, fail);
         });
     });

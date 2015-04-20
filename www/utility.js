@@ -244,65 +244,109 @@ var __extends = this.__extends || function (d, b) {
 
         var Deferred = (function () {
             function Deferred() {
-                this._fulfilled = function (value) {
+                this._fulfilled = function () {
                 };
-                this._rejected = function (reason) {
+                this._rejected = function () {
                 };
-                this._progress = function (progress) {
+                this._progress = function () {
                 };
                 this._state = 0 /* UNFULFILLED */;
             }
             Deferred.prototype.then = function (onFulfilled, onRejected, onProgress) {
+                this._deferred = new Deferred();
+                var that = this;
+
+                if (onFulfilled && typeof onFulfilled === 'function') {
+                    this._fulfilled = function (value) {
+                        var result;
+                        try {
+                            result = onFulfilled(value);
+                        } catch (err) {
+                            that._deferred.reject(err);
+                            return;
+                        }
+
+                        if (result instanceof Deferred) {
+                            result.then(function (res) {
+                                that._deferred.resolve(res);
+                            }, function (err) {
+                                that._deferred.reject(err);
+                            });
+                        } else {
+                            that._deferred.resolve(result);
+                        }
+                    };
+                }
+
+                if (onRejected && typeof onRejected === 'function') {
+                    this._rejected = function (reason) {
+                        var result;
+                        try {
+                            result = onRejected(reason);
+                        } catch (err) {
+                            that._deferred.reject(err);
+                            return;
+                        }
+
+                        if (result instanceof Deferred) {
+                            result.then(function (res) {
+                                that._deferred.resolve(res);
+                            }, function (err) {
+                                that._deferred.reject(err);
+                            });
+                        } else {
+                            that._deferred.reject(result);
+                        }
+                    };
+                }
+
+                if (onProgress && typeof onProgress === 'function') {
+                    this._progress = function (progress) {
+                        var result;
+                        try {
+                            result = onProgress(progress);
+                        } catch (err) {
+                            that._deferred.reject(err);
+                            return;
+                        }
+
+                        if (result instanceof Deferred) {
+                            result.then(function (res) {
+                                that._deferred.notify(res);
+                            }, function (err) {
+                                that._deferred.reject(err);
+                            });
+                        } else {
+                            that._deferred.notify(result);
+                        }
+                    };
+                }
+
                 switch (this._state) {
                     case 0 /* UNFULFILLED */:
-                        if (onFulfilled && typeof onFulfilled === 'function') {
-                            var fulfilled = this._fulfilled;
-                            this._fulfilled = function (value) {
-                                fulfilled(value);
-                                onFulfilled(value);
-                            };
-                        }
-                        if (onRejected && typeof onRejected === 'function') {
-                            var rejected = this._rejected;
-                            this._rejected = function (reason) {
-                                rejected(reason);
-                                onRejected(reason);
-                            };
-                        }
-                        if (onProgress && typeof onProgress === 'function') {
-                            var progressFn = this._progress;
-                            this._progress = function (progress) {
-                                progressFn(progress);
-                                onProgress(progress);
-                            };
-                        }
                         break;
                     case 1 /* RESOLVED */:
-                        if (onFulfilled && typeof onFulfilled === 'function') {
-                            onFulfilled(this._value);
-                        }
+                        this._fulfilled(this._value);
                         break;
                     case 2 /* REJECTED */:
-                        if (onRejected && typeof onRejected === 'function') {
-                            onRejected(this._reason);
-                        }
+                        this._rejected(this._reason);
                         break;
                 }
 
-                return this;
+                return this._deferred;
             };
 
             Deferred.prototype.detach = function () {
-                this._fulfilled = function (value) {
+                this._fulfilled = function () {
                 };
-                this._rejected = function (reason) {
+                this._rejected = function () {
                 };
-                this._progress = function (progress) {
+                this._progress = function () {
                 };
             };
 
             Deferred.prototype.resolve = function (value) {
-                if (this._state != 0 /* UNFULFILLED */) {
+                if (this._state !== 0 /* UNFULFILLED */) {
                     throw new Microsoft.Utility.Exception("Invalid deferred state = " + this._state);
                 }
                 this._value = value;
@@ -313,7 +357,7 @@ var __extends = this.__extends || function (d, b) {
             };
 
             Deferred.prototype.reject = function (reason) {
-                if (this._state != 0 /* UNFULFILLED */) {
+                if (this._state !== 0 /* UNFULFILLED */) {
                     throw new Microsoft.Utility.Exception("Invalid deferred state = " + this._state);
                 }
                 this._reason = reason;
@@ -324,11 +368,12 @@ var __extends = this.__extends || function (d, b) {
             };
 
             Deferred.prototype.notify = function (progress) {
-                if (this._state != 0 /* UNFULFILLED */) {
+                if (this._state !== 0 /* UNFULFILLED */) {
                     throw new Microsoft.Utility.Exception("Invalid deferred state = " + this._state);
                 }
                 this._progress(progress);
             };
+
             return Deferred;
         })();
         Utility.Deferred = Deferred;
