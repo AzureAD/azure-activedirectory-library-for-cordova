@@ -26,7 +26,7 @@ module.exports = function (ctx) {
         var preliminaryRe = /<\/Project>/i;
         var preliminarySubst = "    <ItemGroup>\n" +
             "        <Reference Include=\"Microsoft.IdentityModel.Clients.ActiveDirectory\">\n" +
-            "            <HintPath>plugins\\com.microsoft.aad.adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>\n" +
+            "            <HintPath>plugins\\cordova-plugin-ms-adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>\n" +
             "            <IsWinMDFile>true</IsWinMDFile>\n" +
             "        </Reference>\n" +
             "    </ItemGroup>\n" +
@@ -36,9 +36,9 @@ module.exports = function (ctx) {
         shell.sed('-i', preliminaryRe, preliminarySubst, projitems);
         shell.sed('-i', preliminaryRe, preliminarySubst, projitems);
 
-        var re = /(<ItemGroup)(>)(\s*<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">\s*<HintPath>)(plugins\\com.microsoft.aad.adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd)(<\/HintPath>)/i;
-        var substPhone = '$1 Condition="$(MSBuildProjectFullPath.EndsWith(\'.Phone.jsproj\'))"$2$3..\\..\\plugins\\com.microsoft.aad.adal\\src\\windows\\lib\\wpa\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd$5';
-        var substWindows = '$1 Condition="!$(MSBuildProjectFullPath.EndsWith(\'.Phone.jsproj\'))"$2$3..\\..\\plugins\\com.microsoft.aad.adal\\src\\windows\\lib\\netcore45\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd$5';
+        var re = /(<ItemGroup)(>)(\s*<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">\s*<HintPath>)(plugins\\cordova-plugin-ms-adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd)(<\/HintPath>)/i;
+        var substPhone = '$1 Condition="$(MSBuildProjectFullPath.EndsWith(\'.Phone.jsproj\'))"$2$3..\\..\\plugins\\cordova-plugin-ms-adal\\src\\windows\\lib\\wpa\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd$5';
+        var substWindows = '$1 Condition="!$(MSBuildProjectFullPath.EndsWith(\'.Phone.jsproj\'))"$2$3..\\..\\plugins\\cordova-plugin-ms-adal\\src\\windows\\lib\\netcore45\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd$5';
 
         shell.sed('-i', re, substPhone, projitems);
         shell.sed('-i', re, substWindows, projitems);
@@ -52,7 +52,7 @@ module.exports = function (ctx) {
         '*.Windows80.jsproj'
     ];
 
-    var removeReferenceRe = /(<ItemGroup)(>)(\s*<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">\s*<HintPath>)(plugins\\com.microsoft.aad.adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd)(<\/HintPath>\s*<IsWinMDFile>true<\/IsWinMDFile>\s*<\/Reference>\s*<\/ItemGroup>)/i;
+    var removeReferenceRe = /(<ItemGroup)(>)(\s*<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">\s*<HintPath>)(plugins\\cordova-plugin-ms-adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd)(<\/HintPath>\s*<IsWinMDFile>true<\/IsWinMDFile>\s*<\/Reference>\s*<\/ItemGroup>)/i;
     projectFiles.forEach(function (projfile) {
         var projFilePath = shell.ls(path.join(ctx.opts.projectRoot, 'platforms/windows', projfile))[0];
         if (shell.grep("Microsoft.IdentityModel.Clients.ActiveDirectory.winmd", projFilePath).length > 0) {

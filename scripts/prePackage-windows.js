@@ -18,12 +18,12 @@
 module.exports = function (ctx) {
     var shell = ctx.requireCordovaModule('shelljs');
     var path = ctx.requireCordovaModule('path');
-    var helperPluginId = 'com.microsoft.aad.adal.sso';
+    var helperPluginId = 'cordova-plugin-ms-adal-sso';
 
     // Read config.xml -> extract adal-use-corporate-network variable value; default it to false
     var useCorporateNetwork = false;
     var configXml = shell.ls(path.join(ctx.opts.projectRoot, 'platforms/windows/config.xml'))[0];
-    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/com.microsoft.aad.adal/plugin.xml'))[0];
+    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/plugin.xml'))[0];
 
     var rePreferenceValue = /<preference\s+name="adal-use-corporate-network"\s+value="(.+)"\s*\/>/i;
     var preferenceValue = shell.grep(rePreferenceValue, configXml);
@@ -35,8 +35,8 @@ module.exports = function (ctx) {
         useCorporateNetwork = match.toUpperCase() === 'TRUE';
     }
 
-    var reHelperPluginDepEnabled = /(<)(dependency id="com\.microsoft\.aad\.adal\.sso".*)(>)/i;
-    var reHelperPluginDepDisabled = /(<!--)(dependency id="com\.microsoft\.aad\.adal\.sso".*)(-->)/i;
+    var reHelperPluginDepEnabled = /(<)(dependency id="cordova-plugin-ms-adal-sso".*)(>)/i;
+    var reHelperPluginDepDisabled = /(<!--)(dependency id="cordova-plugin-ms-adal-sso".*)(-->)/i;
     var ssoPluginDepEnabled = (shell.grep(reHelperPluginDepEnabled, pluginXml) !== '');
     var ssoPluginDepDisabled = (shell.grep(reHelperPluginDepDisabled, pluginXml) !== '');
 
@@ -58,7 +58,7 @@ module.exports = function (ctx) {
             shell.sed('-i', reHelperPluginDepDisabled, '<' + '$2' + '>', pluginXml);
 
             ctx.requireCordovaModule('plugman').install(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
-                '.\\plugins\\com.microsoft.aad.adal\\src\\windows\\sso', plugmanInstallOpts.plugins_dir);
+                '.\\plugins\\cordova-plugin-ms-adal\\src\\windows\\sso', plugmanInstallOpts.plugins_dir);
         }
     } else {
         // If adal-use-corporate-network is false, check if we have disabled SSO plugin dependency

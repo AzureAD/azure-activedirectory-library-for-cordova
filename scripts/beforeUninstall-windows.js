@@ -18,7 +18,7 @@
 module.exports = function (ctx) {
     var shell = ctx.requireCordovaModule('shelljs');
     var path = ctx.requireCordovaModule('path');
-    var helperPluginId = 'com.microsoft.aad.adal.sso';
+    var helperPluginId = 'cordova-plugin-ms-adal-sso';
 
     // Removing references from .projitems
     var projitems = shell.ls(path.join(ctx.opts.projectRoot, 'platforms/windows/*.projitems'))[0];
@@ -30,7 +30,7 @@ module.exports = function (ctx) {
     console.log('Removed 2 refereces from projitems');
 
     // Removing dependent helper plugin as we added it manually
-    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/com.microsoft.aad.adal/plugin.xml'))[0];
+    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/plugin.xml'))[0];
     var reHelperPluginDepEnabled = /(<)(dependency id="com\.microsoft\.aad\.adal\.sso".*)(>)/i;
 
     var plugmanInstallOpts = {

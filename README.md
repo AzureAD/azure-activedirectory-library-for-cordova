@@ -94,7 +94,7 @@ To run the tests you need to create a new application as described in [Installat
     `cordova plugin add ../azure-activedirectory-library-for-cordova/tests`
 
   * Update application's config.xml file: change `<content src="index.html" />` to `<content src="cdvtests/index.html" />`
-  * Change AD-specific settings for test application at the beginning of `plugins\com.microsoft.aad.adal\www\tests.js` file. Update `AUTHORITY_URL`, `RESOURCE_URL`, `REDIRECT_URL`, `APP_ID` to values, provided by your Azure AD. For instructions how to setup an Azure AD application see [Setting up an Application in Azure AD section](#setting-up-an-application-in-azure-ad).
+  * Change AD-specific settings for test application at the beginning of `plugins\cordova-plugin-ms-adal\www\tests.js` file. Update `AUTHORITY_URL`, `RESOURCE_URL`, `REDIRECT_URL`, `APP_ID` to values, provided by your Azure AD. For instructions how to setup an Azure AD application see [Setting up an Application in Azure AD section](#setting-up-an-application-in-azure-ad).
   * Build and run application.
 
 ## Windows Quirks ##

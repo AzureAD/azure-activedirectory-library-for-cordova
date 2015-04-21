@@ -32,10 +32,10 @@ module.exports = function (ctx) {
 
     console.log('useCorporateNetwork: ' + useCorporateNetwork);
 
-    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/com.microsoft.aad.adal/plugin.xml'))[0];
+    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/plugin.xml'))[0];
 
     if (useCorporateNetwork === true) {
-        var reHelperPlugin = /(<!--)(dependency id="com.microsoft.aad.adal.sso" url="\.\/src\/windows\/sso"\/)(-->)/i;
+        var reHelperPlugin = /(<!--)(dependency id="cordova-plugin-ms-adal-sso" url="\.\/src\/windows\/sso"\/)(-->)/i;
         var substHelperPlugin = '<' + '$2' + '>';
 
         shell.sed('-i', reHelperPlugin, substHelperPlugin, pluginXml);
@@ -47,6 +47,6 @@ module.exports = function (ctx) {
         };
 
         ctx.requireCordovaModule('plugman').install(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
-            '.\\plugins\\com.microsoft.aad.adal\\src\\windows\\sso', plugmanInstallOpts.plugins_dir);
+            '.\\plugins\\cordova-plugin-ms-adal\\src\\windows\\sso', plugmanInstallOpts.plugins_dir);
     }
 };
