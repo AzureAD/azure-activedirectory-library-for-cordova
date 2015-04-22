@@ -2,15 +2,11 @@
 /*jshint jasmine: true */
 /*global require, module, Microsoft*/
 
-//var TENANT_NAME = 'sampleDirectory2015.onmicrosoft.com';
-//var RESOURCE_URL = 'https://graph.windows.net/';
-//var REDIRECT_URL = 'http://localhost:4400/services/aad/redirectTarget.html';
-//var APP_ID = '98ba0820-f7da-4411-87bb-598e0475536b';
+var TENANT_NAME = '17bf7168-5251-44ed-a3cf-37a5997cc451';
+var APP_ID = '3cfa20df-bca4-4131-ab92-626fb800ebb5';
+var REDIRECT_URL = "http://test.com";
 
-var TENANT_NAME = 'test353.onmicrosoft.com';
 var RESOURCE_URL = 'https://graph.windows.net/';
-var REDIRECT_URL = 'http://localhost:4400/services/aad/redirectTarget.html';
-var APP_ID = '1eed60fd-93bf-44c3-948b-d419b32b5ed6';
 
 var AUTHORITY_URL = 'https://login.windows.net/' + TENANT_NAME + '/';
 var INVALID_AUTHORITY_URL = 'https://invalid.authority.url';
