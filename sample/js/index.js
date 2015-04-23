@@ -94,7 +94,7 @@ var app = {
             .then(function(authResult) {
                 app.log('Acquired token successfully: ' + pre(authResult));
             }, function(err) {
-                app.error("Failed to acquire token: " + pre(err ? { error: err.error, description: err.errorDescription } : ""));
+                app.error("Failed to acquire token: " + pre(err));
             });
     },
     acquireTokenSilent: function() {
@@ -114,10 +114,10 @@ var app = {
             app.authContext.acquireTokenSilentAsync(resourceUrl, appId, testUserId).then(function (authResult) {
                 app.log('Acquired token successfully: ' + pre(authResult));
             }, function(err) {
-                app.error("Failed to acquire token silently: " + pre(err ? { error: err.error, description: err.errorDescription } : ""));
+                app.error("Failed to acquire token silently: " + pre(err));
             });
         }, function(err) {
-            app.error("Unable to get User ID from token cache. Have you acquired token already? " + pre(err ? { error: err.error, description: err.errorDescription } : ""));
+            app.error("Unable to get User ID from token cache. Have you acquired token already? " + pre(err));
         });
     },
     readTokenCache: function () {
@@ -135,7 +135,7 @@ var app = {
             app.log(text);
 
         }, function (err) {
-            app.error("Failed to read token cache: " + pre(err ? { error: err.error, description: err.errorDescription } : ""));
+            app.error("Failed to read token cache: " + pre(err));
         });
     },
     clearTokenCache: function () {
@@ -147,7 +147,7 @@ var app = {
         app.authContext.tokenCache.clear().then(function () {
             app.log("Cache cleaned up successfully.");
         }, function (err) {
-            app.error("Failed to clear token cache: " + pre(err ? { error: err.error, description: err.errorDescription } : ""));
+            app.error("Failed to clear token cache: " + pre(err));
         });
     }
 };
