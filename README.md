@@ -64,9 +64,7 @@ For more API documentation see [sample application](https://github.com/AzureAD/a
 
     `cd ADALSample`
 
-    `cordova platform add android@4.0.0`
-
-   __Note__: We use specific Android platform version here since we require some functionality which is not released yet. This will be updated soon after Cordova Tools release.
+    `cordova platform add android`
 
     `cordova platform add ios`
 
