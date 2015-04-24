@@ -27,7 +27,7 @@ module.exports = function (ctx) {
     var xcode = ctx.requireCordovaModule('xcode');
     // this is requried to clear internal cordova ios projects cache;
     // otherwise our changes will be overriden by cached item
-    var iosPlatform = ctx.requireCordovaModule('../plugman/platforms').ios;
+    var iosPlatform = ctx.requireCordovaModule('../plugman/platforms/ios');
 
     var deferral = new ctx.requireCordovaModule('q').defer();
 
