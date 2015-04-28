@@ -35,6 +35,9 @@
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+            <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+            <uses-permission android:name="android.permission.USE_CREDENTIALS" />
         </config-file>
 
         <source-file src="src/android/CordovaAdalPlugin.java" target-dir="src/com/microsoft/aad/adal" />
