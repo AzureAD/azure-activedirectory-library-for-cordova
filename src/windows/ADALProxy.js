@@ -28,9 +28,11 @@ function mapUserUniqueIdToDisplayName(context, uniqueId) {
     var cacheItems = context.tokenCache.readItems();
 
     for (var i = 0; i < cacheItems.length; i++) {
-        if (cacheItems[i].uniqueId === uniqueId) {
-            return cacheItems[i].displayableId;
-        }
+        try {
+            if (cacheItems[i].uniqueId === uniqueId) {
+                return cacheItems[i].displayableId;
+            }
+        } catch (e) { }
     }
 }
 
@@ -94,6 +96,7 @@ var ADALProxy = {
             var redirectUrl = new Windows.Foundation.Uri(args[3]);
             var userId = args[4];
             var extraQueryParameters = args[5];
+            var sso = args[6];
 
             var userIdentifier;
             var displayName;
@@ -145,9 +148,15 @@ var ADALProxy = {
                         fail(e);
                     }
                 } else {
-                    context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
-                        handleAuthResult(win, fail, res);
-                    }, fail);
+                    if (sso === true) {
+                        context.acquireTokenAsync(resourceUrl, clientId, null, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.never, userIdentifier, extraQueryParameters).then(function (res) {
+                            handleAuthResult(win, fail, res);
+                        }, fail);
+                    } else {
+                        context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
+                            handleAuthResult(win, fail, res);
+                        }, fail);
+                    }
                 }
             }, fail);
         } catch (e) {
@@ -192,7 +201,48 @@ var ADALProxy = {
             var authority = args[0];
 
             ADALProxy.getOrCreateCtx(authority).then(function (context) {
-                win(context.tokenCache.readItems());
+                win(context.tokenCache.readItems().map(function(item) {
+                    var copy = {};
+
+                    try {
+                        copy.accessToken = item.accessToken;
+                    } catch (e) { }
+
+                    try {
+                        copy.authority = item.authority;
+                    } catch (e) { }
+
+                    try {
+                        copy.clientId = item.clientId;
+                    } catch (e) { }
+
+                    try {
+                        copy.displayableId = item.displayableId;
+                    } catch (e) { }
+
+                    try {
+                        copy.expiresOn = item.expiresOn;
+                    } catch (e) { }
+
+                    try {
+                        copy.isMultipleResourceRefreshToken = item.isMultipleResourceRefreshToken;
+                    } catch (e) { }
+
+                    try {
+                        copy.resource = item.resource;
+                    } catch (e) { }
+
+                    try {
+                        copy.tenantId = item.tenantId;
+                    } catch (e) { }
+
+
+                    try {
+                        copy.idToken = item.idToken;
+                    } catch (e) { }
+
+                    return copy;
+                }));
             }, fail);
         } catch (e) {
             fail(e);

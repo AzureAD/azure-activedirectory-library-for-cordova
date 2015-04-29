@@ -75,16 +75,18 @@ AuthenticationContext.createAsync = function (authority, validateAuthority) {
  * @param   {String}  extraQueryParameters
  *                                Extra query parameters (optional)
  *                                Parameters should be escaped before passing to this method (e.g. using 'encodeURI()')
+ * @param   {Boolean} sso Use SSO-mode for acquiring the token (to use SSO adal-use-corporate-network has to be true in
+ *                        config.xml as well). False by default
  *
  * @returns {Promise} Promise either fulfilled with AuthenticationResult object or rejected with error
  */
-AuthenticationContext.prototype.acquireTokenAsync = function (resourceUrl, clientId, redirectUrl, userId, extraQueryParameters) {
+AuthenticationContext.prototype.acquireTokenAsync = function (resourceUrl, clientId, redirectUrl, userId, extraQueryParameters, sso) {
 
-    checkArgs('sssSS', 'AuthenticationContext.acquireTokenAsync', arguments);
+    checkArgs('sssSS*', 'AuthenticationContext.acquireTokenAsync', arguments);
 
     var d = new Deferred();
 
-    bridge.executeNativeMethod('acquireTokenAsync', [this.authority, resourceUrl, clientId, redirectUrl, userId, extraQueryParameters])
+    bridge.executeNativeMethod('acquireTokenAsync', [this.authority, resourceUrl, clientId, redirectUrl, userId, extraQueryParameters, sso])
     .then(function(authResult){
         d.resolve(new AuthenticationResult(authResult));
     }, function(err) {
