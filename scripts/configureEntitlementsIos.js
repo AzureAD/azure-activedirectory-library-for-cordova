@@ -53,7 +53,7 @@ module.exports = function (ctx) {
         var projectPath = path.join(projFolder, 'project.pbxproj');
         var xcodeProject = xcode.project(projectPath);
 
-        var entitlementsFile = path.join(projName, "Resources/ADALiOS.entitlements");
+        var entitlementsFile = path.join("\"",projName, "Resources/ADALiOS.entitlements\"");
 
         console.log('Attempt to update xcode project: ' + projectPath);
 
