@@ -96,7 +96,6 @@ var ADALProxy = {
             var redirectUrl = new Windows.Foundation.Uri(args[3]);
             var userId = args[4];
             var extraQueryParameters = args[5];
-            var sso = args[6];
 
             var userIdentifier;
             var displayName;
@@ -148,9 +147,15 @@ var ADALProxy = {
                         fail(e);
                     }
                 } else {
-                    if (sso === true) {
-                        context.acquireTokenAsync(resourceUrl, clientId, null, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.never, userIdentifier, extraQueryParameters).then(function (res) {
-                            handleAuthResult(win, fail, res);
+                    if (context.useCorporateNetwork) {
+                        // Try to SSO first
+                        context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.never, userIdentifier, extraQueryParameters).then(function (res) {
+                            console.log('PromptBehavior.never res.errorDescription: ' + JSON.stringify(res.errorDescription));
+                            handleAuthResult(win, function() {
+                                context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
+                                    handleAuthResult(win, fail, res);
+                                }, fail);
+                            }, res);
                         }, fail);
                     } else {
                         context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
