@@ -37,11 +37,12 @@
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         </config-file>
 
-        <source-file src="src/android/CordovaAdalPlugin.java" target-dir="src/com/microsoft/aad/adal" />
-        <source-file src="src/android/DefaultAuthenticationCallback.java" target-dir="src/com/microsoft/aad/adal" />
-        <source-file src="src/android/SimpleSerialization.java" target-dir="src/com/microsoft/aad/adal" />
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.microsoft.aad.adal.AuthenticationActivity" ></activity>
+        </config-file>
 
-        <framework src="src/android/adal.gradle" custom="true" type="gradleReference"/>
+        <framework src="src/android/CordovaADAL" custom="true" />
+
         <hook type="after_plugin_install" src="scripts/afterPluginInstall-android.js" />
     </platform>
 

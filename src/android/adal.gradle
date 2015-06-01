@@ -1,6 +1,0 @@
-repositories {
-    mavenCentral()
-}
-dependencies {
-    compile('com.microsoft.aad:adal:1.1.1') {}
-}
