@@ -150,9 +150,8 @@ var ADALProxy = {
                     if (context.useCorporateNetwork) {
                         // Try to SSO first
                         context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.never, userIdentifier, extraQueryParameters).then(function (res) {
-                            console.log('PromptBehavior.never res.errorDescription: ' + JSON.stringify(res.errorDescription));
                             handleAuthResult(win, function() {
-                                context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
+                                context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
                                     handleAuthResult(win, fail, res);
                                 }, fail);
                             }, res);
