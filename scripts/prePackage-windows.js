@@ -26,6 +26,7 @@ module.exports = function (ctx) {
     var reHelperPluginDepDisabled = /(<!--)(dependency id="cordova-plugin-ms-adal-sso".*)(-->)/i;
     var ssoPluginDepEnabled = (shell.grep(reHelperPluginDepEnabled, pluginXml) !== '');
     var ssoPluginDepDisabled = (shell.grep(reHelperPluginDepDisabled, pluginXml) !== '');
+    var ssoPluginPath = path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/src/windows/sso');
 
     var plugmanInstallOpts = {
         plugins_dir: path.join(ctx.opts.projectRoot, 'plugins'),
@@ -43,9 +44,10 @@ module.exports = function (ctx) {
 
             // Enabling dependency
             shell.sed('-i', reHelperPluginDepDisabled, '<' + '$2' + '>', pluginXml);
+            var plugman = ctx.requireCordovaModule('../plugman/plugman');
 
-            ctx.requireCordovaModule('plugman').install(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
-                '.\\plugins\\cordova-plugin-ms-adal\\src\\windows\\sso', plugmanInstallOpts.plugins_dir);
+            plugman.install(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
+                ssoPluginPath, plugmanInstallOpts.plugins_dir);
         }
     } else {
         // If adal-use-corporate-network is false, check if we have disabled SSO plugin dependency
@@ -57,8 +59,9 @@ module.exports = function (ctx) {
 
             // Disabling dependency first to allow dependent plugin to be removed
             shell.sed('-i', reHelperPluginDepEnabled, '<!--' + '$2' + '-->', pluginXml);
+            var plugman = ctx.requireCordovaModule('../plugman/plugman');
 
-            ctx.requireCordovaModule('plugman').uninstall(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
+            plugman.uninstall(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
                 helperPluginId, plugmanInstallOpts.plugins_dir);
         }
     }
