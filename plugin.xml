@@ -68,8 +68,6 @@
     </platform>
 
     <platform name="windows">
-        <!--dependency id="cordova-plugin-ms-adal-sso" url="./src/windows/sso" /-->
-
         <js-module src="src/windows/ADALProxy.js" name="ADALProxy">
             <runs />
         </js-module>

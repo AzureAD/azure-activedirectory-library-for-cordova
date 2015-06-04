@@ -5,6 +5,7 @@
 module.exports = function (ctx) {
     var shell = ctx.requireCordovaModule('shelljs');
     var path = ctx.requireCordovaModule('path');
+    var fs = ctx.requireCordovaModule('fs');
     var helperPluginId = 'cordova-plugin-ms-adal-sso';
 
     // Read config.xml -> extract adal-use-corporate-network variable value; default it to false
@@ -22,10 +23,9 @@ module.exports = function (ctx) {
         useCorporateNetwork = match.toUpperCase() === 'TRUE';
     }
 
-    var reHelperPluginDepEnabled = /(<)(dependency id="cordova-plugin-ms-adal-sso".*)(>)/i;
-    var reHelperPluginDepDisabled = /(<!--)(dependency id="cordova-plugin-ms-adal-sso".*)(-->)/i;
-    var ssoPluginDepEnabled = (shell.grep(reHelperPluginDepEnabled, pluginXml) !== '');
-    var ssoPluginDepDisabled = (shell.grep(reHelperPluginDepDisabled, pluginXml) !== '');
+    var ssoPluginInstallPath = path.join(ctx.opts.projectRoot, 'plugins', helperPluginId);
+    var ssoPluginDepEnabled = fs.existsSync(ssoPluginInstallPath);
+
     var ssoPluginPath = path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/src/windows/sso');
 
     var plugmanInstallOpts = {
@@ -38,12 +38,11 @@ module.exports = function (ctx) {
         // If adal-use-corporate-network is true, check if we have enabled SSO plugin dependency
         //  If yes, then it should be already added, no action needed
         //  If no - enable it and manually install the dependent plugin
-        if(ssoPluginDepDisabled) {
+        if(!ssoPluginDepEnabled) {
             console.log('useCorporateNetwork: ' + useCorporateNetwork);
             console.log('Adding SSO helper plugin');
 
             // Enabling dependency
-            shell.sed('-i', reHelperPluginDepDisabled, '<' + '$2' + '>', pluginXml);
             var plugman = ctx.requireCordovaModule('../plugman/plugman');
 
             plugman.install(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
@@ -57,8 +56,7 @@ module.exports = function (ctx) {
             console.log('useCorporateNetwork: ' + useCorporateNetwork);
             console.log('Removing SSO helper plugin');
 
-            // Disabling dependency first to allow dependent plugin to be removed
-            shell.sed('-i', reHelperPluginDepEnabled, '<!--' + '$2' + '-->', pluginXml);
+            // Removing dependency
             var plugman = ctx.requireCordovaModule('../plugman/plugman');
 
             plugman.uninstall(plugmanInstallOpts.platform, plugmanInstallOpts.project, 

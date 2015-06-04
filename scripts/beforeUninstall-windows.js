@@ -5,6 +5,7 @@
 module.exports = function (ctx) {
     var shell = ctx.requireCordovaModule('shelljs');
     var path = ctx.requireCordovaModule('path');
+    var fs = ctx.requireCordovaModule('fs');
     var helperPluginId = 'cordova-plugin-ms-adal-sso';
 
     // Removing references from .projitems
@@ -16,23 +17,22 @@ module.exports = function (ctx) {
     shell.sed('-i', referenceRe, '', projitems);
     console.log('Removed 2 refereces from projitems');
 
-    // Removing dependent helper plugin as we added it manually
-    var pluginXml = shell.ls(path.join(ctx.opts.projectRoot, 'plugins/cordova-plugin-ms-adal/plugin.xml'))[0];
-    var reHelperPluginDepEnabled = /(<)(dependency id="com\.microsoft\.aad\.adal\.sso".*)(>)/i;
-
-    var plugmanInstallOpts = {
-        plugins_dir: path.join(ctx.opts.projectRoot, 'plugins'),
-        platform: 'windows',
-        project: path.join(ctx.opts.projectRoot, 'platforms', 'windows')
-    };
-
-    // Removing helper plugin if it was installed
-    if (shell.grep(reHelperPluginDepEnabled, pluginXml)) {
+    // Removing helper plugin as we added it manually
+    var ssoPluginInstallPath = path.join(ctx.opts.projectRoot, 'plugins', helperPluginId);
+    var ssoPluginDepEnabled = fs.existsSync(ssoPluginInstallPath);
+    
+    if (ssoPluginDepEnabled) {
         console.log('Removing SSO helper plugin');
-        // Disabling dependency first to allow dependent plugin to be removed
-        shell.sed('-i', reHelperPluginDepEnabled, '<!--' + '$2' + '-->', pluginXml);
 
-        ctx.requireCordovaModule('plugman').uninstall(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
+        var plugmanInstallOpts = {
+            plugins_dir: path.join(ctx.opts.projectRoot, 'plugins'),
+            platform: 'windows',
+            project: path.join(ctx.opts.projectRoot, 'platforms', 'windows')
+        };
+
+        var plugman = ctx.requireCordovaModule('../plugman/plugman');
+
+        plugman.uninstall(plugmanInstallOpts.platform, plugmanInstallOpts.project, 
             helperPluginId, plugmanInstallOpts.plugins_dir);
     }
 };
