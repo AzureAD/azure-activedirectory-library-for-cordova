@@ -601,7 +601,6 @@ function parseJWT (jwt) {
     }
 }
 
-//# sourceMappingURL=utility.js.map
 module.exports.extends = __extends;
 
 module.exports.parseJWT = parseJWT;
