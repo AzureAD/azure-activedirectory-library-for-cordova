@@ -384,6 +384,21 @@
             Gets a value indicating whether the refresh token can be used for requesting access token for other resources.
             </summary>
         </member>
+        <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.UnauthorizedUserInformationAccess">
+            <summary>
+            Unauthorized user information access
+            </summary>
+        </member>
+        <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.CannotAccessUserInformation">
+            <summary>
+            Cannot access user information
+            </summary>
+        </member>
+        <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.NeedToSetCallbackUriAsLocalSetting">
+            <summary>
+            Need to set callback uri as local setting
+            </summary>
+        </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.Unknown">
             <summary>
             Unknown error.

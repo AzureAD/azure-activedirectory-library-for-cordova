@@ -32,18 +32,4 @@ module.exports = function (ctx) {
     } else {
         console.log('Already patched, skipping...');
     }
-
-    var projectFiles = [
-        '*.Phone.jsproj',
-        '*.Windows.jsproj',
-        '*.Windows80.jsproj'
-    ];
-
-    var removeReferenceRe = /(<ItemGroup)(>)(\s*<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">\s*<HintPath>)(plugins\\cordova-plugin-ms-adal\\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd)(<\/HintPath>\s*<IsWinMDFile>true<\/IsWinMDFile>\s*<\/Reference>\s*<\/ItemGroup>)/i;
-    projectFiles.forEach(function (projfile) {
-        var projFilePath = shell.ls(path.join(ctx.opts.projectRoot, 'platforms/windows', projfile))[0];
-        if (shell.grep("Microsoft.IdentityModel.Clients.ActiveDirectory.winmd", projFilePath).length > 0) {
-            shell.sed('-i', removeReferenceRe, '', projFilePath);
-        }
-    });
 };
