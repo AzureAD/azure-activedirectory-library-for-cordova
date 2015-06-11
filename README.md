@@ -36,10 +36,16 @@ For more API documentation see [sample application](https://github.com/AzureAD/a
 
 ## Supported platforms
 
-  * Android (cordova-android@>=4.0.0 is supported)
+  * Android
   * iOS
   * Windows (Windows 8.0, Windows 8.1 and Windows Phone 8.1)
 
+## Known issues and workarounds
+
+## 'Class not registered' error on Windows
+
+If you are using Visual Studio 2013 and see 'WinRTError: Class not registered' runtime error on Windows make sure Visual Studio [Update 5](https://www.visualstudio.com/news/vs2013-update5-vs) is installed.
+ 
 ## Installation Instructions
 
 ### Prerequisites
@@ -50,7 +56,10 @@ For more API documentation see [sample application](https://github.com/AzureAD/a
 
   Cordova CLI can be easily installed via NPM package manager: `npm install -g cordova`
 
-* Additional prerequisites for each target platform can be found at [Cordova platforms documentation](http://cordova.apache.org/docs/en/edge/guide_platforms_index.md.html#Platform%20Guides) page.
+* Additional prerequisites for each target platform can be found at [Cordova platforms documentation](http://cordova.apache.org/docs/en/edge/guide_platforms_index.md.html#Platform%20Guides) page:
+ * [Instructions for Android](http://cordova.apache.org/docs/en/edge/guide_platforms_android_index.md.html#Android%20Platform%20Guide)
+ * [Instructions for iOS](http://cordova.apache.org/docs/en/edge/guide_platforms_ios_index.md.html#iOS%20Platform%20Guide)
+ * [Instructions for Windows] (http://cordova.apache.org/docs/en/edge/guide_platforms_win8_index.md.html#Windows%20Platform%20Guide)
 
 ### To build and run sample application
 
@@ -108,13 +117,6 @@ To use ADFS/SSO on Windows platform (Windows Phone 8.1 is not supported for now)
 It will add all needed application capabilities and toggle authContext to support ADFS. You can change its value to `false` and back later, or remove it from `config.xml` - call `cordova prepare` after it to apply the changes.
 
 __Note__: You should not normally use `adal-use-corporate-network` as it adds capabilities, which prevents an app from being published in the Windows Store.
-
-__Note__: In case if you have a Visual Studio 2015 Preview installed you may have issues with project packaging for Windows related to MSBuild v.14 issue.
-You can workaround this issue by using patched cordova-windows with MSBuild reverted to v.12:
-
-* Instead of `cordova platform add windows` use
-* `git clone -b msbuild14-issue https://github.com/MSOpenTech/cordova-windows`
-* `cordova platform add ..\cordova-windows`
 
 ## Copyrights ##
 Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
