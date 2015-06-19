@@ -193,6 +193,7 @@ var ADALProxy = {
 
             ADALProxy.getOrCreateCtx(authority).then(function (context) {
                 context.tokenCache.clear();
+                ctxCache = {};
                 win();
             }, fail);
         } catch (e) {
