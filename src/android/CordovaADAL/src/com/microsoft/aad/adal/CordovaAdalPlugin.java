@@ -122,12 +122,14 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         }
 
         if (userId != null) {
-            ArrayList<TokenCacheItem> tokensForUserId =
-                    ((DefaultTokenCacheStore)authContext.getCache()).getTokensForUser(userId);
+            ITokenCacheStore cache = authContext.getCache();
+            if (cache instanceof ITokenStoreQuery) {
 
-            if (tokensForUserId.size() > 0) {
-                // Try to acquire alias for specified userId
-                userId = tokensForUserId.get(0).getUserInfo().getDisplayableId();
+                ArrayList<TokenCacheItem> tokensForUserId = ((ITokenStoreQuery)cache).getTokensForUser(userId);
+                if (tokensForUserId.size() > 0) {
+                    // Try to acquire alias for specified userId
+                    userId = tokensForUserId.get(0).getUserInfo().getDisplayableId();
+                }
             }
         }
 
@@ -162,13 +164,16 @@ public class CordovaAdalPlugin extends CordovaPlugin {
             return true;
         }
 
-        DefaultTokenCacheStore cache = (DefaultTokenCacheStore)authContext.getCache();
-        Iterator<TokenCacheItem> cacheItems = cache.getAll();
         JSONArray result = new JSONArray();
+        ITokenCacheStore cache = authContext.getCache();
 
-        while (cacheItems.hasNext()){
-            TokenCacheItem item = cacheItems.next();
-            result.put(tokenItemToJSON(item));
+        if (cache instanceof ITokenStoreQuery) {
+            Iterator<TokenCacheItem> cacheItems = ((ITokenStoreQuery)cache).getAll();
+
+            while (cacheItems.hasNext()){
+                TokenCacheItem item = cacheItems.next();
+                result.put(tokenItemToJSON(item));
+            }
         }
 
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
