@@ -25,13 +25,21 @@ module.exports = function (ctx) {
     var fs = ctx.requireCordovaModule('fs');
     var path = ctx.requireCordovaModule('path');
     var xcode = ctx.requireCordovaModule('xcode');
-    // this is requried to clear internal cordova ios projects cache;
-    // otherwise our changes will be overriden by cached item
-    var iosPlatform = ctx.requireCordovaModule('../plugman/platforms/ios');
 
     var deferral = new ctx.requireCordovaModule('q').defer();
 
     var platformRoot = path.join(ctx.opts.projectRoot, 'platforms', 'ios');
+
+    // this api is required to clear internal cordova ios projects cache;
+    // otherwise our changes will be overwritten by cached item
+    var iosProjectFile =  null;
+    try {
+        // recent versions (4.0+) of cordova-ios with own platform api
+        iosProjectFile = require(path.join(ctx.opts.projectRoot, 'platforms/ios/cordova/lib/projectFile'));
+    } catch (ex) {
+        // fallback to cordova-lib (shared platform functionality)
+        iosProjectFile = ctx.requireCordovaModule('../plugman/platforms/ios');
+    }
 
     fs.readdir(platformRoot, function (err, data) {
         if(err) {
@@ -81,9 +89,9 @@ module.exports = function (ctx) {
 
             fs.writeFileSync(projectPath, xcodeProject.writeSync());
 
-            if (iosPlatform && iosPlatform.purgeProjectFileCache) {
+            if (iosProjectFile && iosProjectFile.purgeProjectFileCache) {
                 console.log('Updating iOS projects cache...');
-                iosPlatform.purgeProjectFileCache(platformRoot);
+                iosProjectFile.purgeProjectFileCache(platformRoot);
             }
 
             console.log('Operation completed');
