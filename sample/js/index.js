@@ -107,7 +107,7 @@ var app = {
         // Note: This is for the test purposes only
         var testUserId;
         app.authContext.tokenCache.readItems().then(function (cacheItems) {
-            if (cacheItems.length > 1) {
+            if (cacheItems.length > 0) {
                 testUserId = cacheItems[0].userInfo.userId;
             }
 
