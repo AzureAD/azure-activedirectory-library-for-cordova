@@ -45,7 +45,11 @@ For more API documentation see [sample application](https://github.com/AzureAD/a
 ## 'Class not registered' error on Windows
 
 If you are using Visual Studio 2013 and see 'WinRTError: Class not registered' runtime error on Windows make sure Visual Studio [Update 5](https://www.visualstudio.com/news/vs2013-update5-vs) is installed.
- 
+
+## Multiple login windows issue
+
+Multiple login dialog windows will be shown if `acquireTokenAsync` is called multiple times and the token could not be acquired silently (at the first run for example). Use a [promise queueing](https://www.npmjs.com/package/promise-queue)/semaphore logic in the app code to avoid this issue.
+
 ## Installation Instructions
 
 ### Prerequisites
