@@ -72,31 +72,27 @@ module.exports = function (ctx) {
 
         console.log('Attempt to update xcode project: ' + projectPath);
 
-        xcodeProject.parse(function (err) {
-            if(err) {
-                throw err;
-            }
+        xcodeProject.parseSync();
 
-            var buildConfig = xcodeProject.pbxXCBuildConfigurationSection();
+        var buildConfig = xcodeProject.pbxXCBuildConfigurationSection();
 
-            if (action == ACTION_INSTALL) {
-                console.log('Adding reference to entitlements file ' + entitlementsFile);
-                setbuildSettingsProp(buildConfig, projName, CODE_SIGN_ENTITLEMENTS, entitlementsFile); 
-            } else { // uninstall
-                console.log('Removing entitlements from ' + CODE_SIGN_ENTITLEMENTS + ' section');
-                setbuildSettingsProp(buildConfig, projName, CODE_SIGN_ENTITLEMENTS, null); 
-            }
+        if (action == ACTION_INSTALL) {
+            console.log('Adding reference to entitlements file ' + entitlementsFile);
+            setbuildSettingsProp(buildConfig, projName, CODE_SIGN_ENTITLEMENTS, entitlementsFile);
+        } else { // uninstall
+            console.log('Removing entitlements from ' + CODE_SIGN_ENTITLEMENTS + ' section');
+            setbuildSettingsProp(buildConfig, projName, CODE_SIGN_ENTITLEMENTS, null);
+        }
 
-            fs.writeFileSync(projectPath, xcodeProject.writeSync());
+        fs.writeFileSync(projectPath, xcodeProject.writeSync());
 
-            if (iosProjectFile && iosProjectFile.purgeProjectFileCache) {
-                console.log('Updating iOS projects cache...');
-                iosProjectFile.purgeProjectFileCache(platformRoot);
-            }
+        if (iosProjectFile && iosProjectFile.purgeProjectFileCache) {
+            console.log('Updating iOS projects cache...');
+            iosProjectFile.purgeProjectFileCache(platformRoot);
+        }
 
-            console.log('Operation completed');
-            deferral.resolve();
-        });
+        console.log('Operation completed');
+        deferral.resolve();
     });
 
     return deferral.promise;
@@ -104,21 +100,19 @@ module.exports = function (ctx) {
 
 function setbuildSettingsProp(projSection, projName, propName, value) {
 
-    for (var p in projSection) {
-        if (projSection.hasOwnProperty(p)) {
-            // we check for PRODUCT_NAME here to skip CordovaLib
-            // TODO better to test for "%projName%" or %projName%
-            if (p == 'buildSettings' && projSection[p]['PRODUCT_NAME']) {
-                console.log(propName + ' = ' + value);
+    Object.keys(projSection).forEach(function (p) {
+        // we check for PRODUCT_NAME here to skip CordovaLib
+        // TODO better to test for "%projName%" or %projName%
+        if (p == 'buildSettings' && projSection[p]['PRODUCT_NAME']) {
+            console.log(propName + ' = ' + value);
 
-                if (value !== null) {
-                    projSection[p][propName] = value;
-                } else {
-                    delete projSection[p][propName];
-                }
-            } else if (typeof projSection[p] == 'object') {
-                setbuildSettingsProp(projSection[p], projName, propName, value);
+            if (value !== null) {
+                projSection[p][propName] = value;
+            } else {
+                delete projSection[p][propName];
             }
+        } else if (typeof projSection[p] == 'object') {
+            setbuildSettingsProp(projSection[p], projName, propName, value);
         }
-    }
+    });
 }
