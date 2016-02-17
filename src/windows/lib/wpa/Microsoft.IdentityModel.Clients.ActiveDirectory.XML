@@ -124,6 +124,30 @@
             <param name="validateAuthority">Flag to turn address validation ON or OFF.</param>
             <param name="tokenCache">Token cache used to lookup cached tokens on calls to AcquireToken</param>
         </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.Authority">
+            <summary>
+            Gets address of the authority to issue token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.ValidateAuthority">
+            <summary>
+            Gets a value indicating whether address validation is ON or OFF.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.TokenCache">
+            <summary>
+            Property to provide ADAL's token cache. By default, TokenCache is a persistent cache based on application's local settings. 
+            Library will automatically save tokens in default TokenCache whenever you obtain them. Cached tokens will be available only to the application that saved them. 
+            Cached tokens in default token cache will outlive the application's execution, and will be available in subsequent runs.
+            To turn OFF token caching, set TokenCache to null. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.CorrelationId">
+            <summary>
+            Gets or sets correlation Id which would be sent to the service with the next request. 
+            Correlation Id is to be used for diagnostics purposes. 
+            </summary>
+        </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.CreateAsync(System.String)">
             <summary>
             Factory method to create the context with the address of the authority.
@@ -204,30 +228,6 @@
             <param name="args">Information to an app that was launched after being suspended for a web authentication broker operation.</param>
             <returns>It contains Access Token, Refresh Token and the Access Token's expiration time.</returns>
         </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.Authority">
-            <summary>
-            Gets address of the authority to issue token.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.ValidateAuthority">
-            <summary>
-            Gets a value indicating whether address validation is ON or OFF.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.TokenCache">
-            <summary>
-            Property to provide ADAL's token cache. By default, TokenCache is a persistent cache based on application's local settings. 
-            Library will automatically save tokens in default TokenCache whenever you obtain them. Cached tokens will be available only to the application that saved them. 
-            Cached tokens in default token cache will outlive the application's execution, and will be available in subsequent runs.
-            To turn OFF token caching, set TokenCache to null. 
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext.CorrelationId">
-            <summary>
-            Gets or sets correlation Id which would be sent to the service with the next request. 
-            Correlation Id is to be used for diagnostics purposes. 
-            </summary>
-        </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationParameters">
             <summary>
             Contains authentication parameters based on unauthorized response from resource server.
@@ -244,13 +244,6 @@
             <param name="resourceUrl">Address of the resource</param>
             <returns>AuthenticationParameters object containing authentication parameters</returns>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationParameters.CreateFromResponseAuthenticateHeader(System.String)">
-            <summary>
-            Creates authentication parameters from the WWW-Authenticate header in response received from resource. This method expects the header to contain authentication parameters.
-            </summary>
-            <param name="authenticateHeader">Content of header WWW-Authenticate header</param>
-            <returns>AuthenticationParameters object containing authentication parameters</returns>
-        </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationParameters.Authority">
             <summary>
             Gets or sets the address of the authority to issue token.
@@ -260,6 +253,13 @@
             <summary>
             Gets or sets the identifier of the target resource that is the recipient of the requested token.
             </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationParameters.CreateFromResponseAuthenticateHeader(System.String)">
+            <summary>
+            Creates authentication parameters from the WWW-Authenticate header in response received from resource. This method expects the header to contain authentication parameters.
+            </summary>
+            <param name="authenticateHeader">Content of header WWW-Authenticate header</param>
+            <returns>AuthenticationParameters object containing authentication parameters</returns>
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationStatus">
             <summary>
@@ -290,39 +290,6 @@
             Contains the results of one token acquisition operation. 
             </summary>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.ReplaceNullStringPropertiesWithEmptyString">
-            <summary>
-            The Windows Runtime string type is a value type and has no null value. 
-            The .NET projection prohibits passing a null .NET string across the Windows Runtime ABI boundary for this reason.
-            </summary>
-        </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.#ctor(System.String,System.String,System.String,System.DateTimeOffset)">
-            <summary>
-            Creates result returned from AcquireToken. Except in advanced scenarios related to token caching, you do not need to create any instance of AuthenticationResult.
-            </summary>
-            <param name="accessTokenType">Type of the Access Token returned</param>
-            <param name="accessToken">The Access Token requested</param>
-            <param name="refreshToken">The Refresh Token associated with the requested Access Token</param>
-            <param name="expiresOn">The point in time in which the Access Token returned in the AccessToken property ceases to be valid</param>
-        </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.Deserialize(System.String)">
-            <summary>
-            Serializes the object to a JSON string
-            </summary>
-            <returns>Deserialized authentication result</returns>
-        </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.CreateAuthorizationHeader">
-            <summary>
-            Creates authorization header from authentication result.
-            </summary>
-            <returns>Created authorization header</returns>
-        </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.Serialize">
-            <summary>
-            Serializes the object to a JSON string
-            </summary>
-            <returns>Serialized authentication result</returns>
-        </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.Status">
             <summary>
             Gets the outcome of the token acquisition operation.
@@ -344,6 +311,21 @@
             NavigateError Event Status Code in browser based flow (See http://msdn.microsoft.com/en-us/library/bb268233(v=vs.85).aspx).
             You can use this code for purposes such as implementing retry logic or error investigation.
             </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.ReplaceNullStringPropertiesWithEmptyString">
+            <summary>
+            The Windows Runtime string type is a value type and has no null value. 
+            The .NET projection prohibits passing a null .NET string across the Windows Runtime ABI boundary for this reason.
+            </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.#ctor(System.String,System.String,System.String,System.DateTimeOffset)">
+            <summary>
+            Creates result returned from AcquireToken. Except in advanced scenarios related to token caching, you do not need to create any instance of AuthenticationResult.
+            </summary>
+            <param name="accessTokenType">Type of the Access Token returned</param>
+            <param name="accessToken">The Access Token requested</param>
+            <param name="refreshToken">The Refresh Token associated with the requested Access Token</param>
+            <param name="expiresOn">The point in time in which the Access Token returned in the AccessToken property ceases to be valid</param>
         </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.AccessTokenType">
             <summary>
@@ -385,6 +367,24 @@
             <summary>
             Gets a value indicating whether the refresh token can be used for requesting access token for other resources.
             </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.Deserialize(System.String)">
+            <summary>
+            Serializes the object to a JSON string
+            </summary>
+            <returns>Deserialized authentication result</returns>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.CreateAuthorizationHeader">
+            <summary>
+            Creates authorization header from authentication result.
+            </summary>
+            <returns>Created authorization header</returns>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult.Serialize">
+            <summary>
+            Serializes the object to a JSON string
+            </summary>
+            <returns>Serialized authentication result</returns>
         </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.UnauthorizedUserInformationAccess">
             <summary>
@@ -667,6 +667,38 @@
             Constructor receiving state of the cache
             </summary>        
         </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.DefaultShared">
+            <summary>
+            Static token cache shared by all instances of AuthenticationContext which do not explicitly pass a cache instance during construction.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.BeforeAccess">
+            <summary>
+            Notification method called before any library method accesses the cache.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.BeforeWrite">
+            <summary>
+            Notification method called before any library method writes to the cache. This notification can be used to reload
+            the cache state from a row in database and lock that row. That database row can then be unlocked in <see cref="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.AfterAccess" /> notification.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.AfterAccess">
+            <summary>
+            Notification method called after any library method accesses the cache.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.HasStateChanged">
+            <summary>
+            Gets or sets the flag indicating whether cache state has changed. ADAL methods set this flag after any change. Caller application should reset 
+            the flag after serializing and persisting the state of the cache.
+            </summary>
+        </member>
+        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.Count">
+            <summary>
+            Gets the nunmber of items in the cache.
+            </summary>
+        </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.Serialize">
             <summary>
             Serializes current state of the cache as a blob. Caller application can persist the blob and update the state of the cache later by 
@@ -705,36 +737,9 @@
             null results in a wildcard evaluation.
             </summary>
         </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.DefaultShared">
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor">
             <summary>
-            Static token cache shared by all instances of AuthenticationContext which do not explicitly pass a cache instance during construction.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.BeforeAccess">
-            <summary>
-            Notification method called before any library method accesses the cache.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.BeforeWrite">
-            <summary>
-            Notification method called before any library method writes to the cache. This notification can be used to reload
-            the cache state from a row in database and lock that row. That database row can then be unlocked in <see cref="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.AfterAccess" /> notification.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.AfterAccess">
-            <summary>
-            Notification method called after any library method accesses the cache.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.HasStateChanged">
-            <summary>
-            Gets or sets the flag indicating whether cache state has changed. ADAL methods set this flag after any change. Caller application should reset 
-            the flag after serializing and persisting the state of the cache.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCache.Count">
-            <summary>
-            Gets the nunmber of items in the cache.
+             Initializes a new instance of the exception class.
             </summary>
         </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException.#ctor">
@@ -776,21 +781,16 @@
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified. It may especially contain the actual error message returned by the service.</param>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException.ToString">
-            <summary>
-            Creates and returns a string representation of the current exception.
-            </summary>
-            <returns>A string representation of the current exception.</returns>
-        </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException.ErrorCode">
             <summary>
             Gets the protocol error code returned by the service or generated by client. This is the code you can rely on for exception handling.
             </summary>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor">
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException.ToString">
             <summary>
-             Initializes a new instance of the exception class.
+            Creates and returns a string representation of the current exception.
             </summary>
+            <returns>A string representation of the current exception.</returns>
         </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalIdParameter.Product">
             <summary>
@@ -851,12 +851,6 @@
             <param name="serviceErrorCodes">The specific error codes that may be returned by the service.</param>
             <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified. It may especially contain the actual error message returned by the service.</param>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException.ToString">
-            <summary>
-            Creates and returns a string representation of the current exception.
-            </summary>
-            <returns>A string representation of the current exception.</returns>
-        </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException.StatusCode">
             <summary>
             Gets the status code returned from http layer. This status code is either the HttpStatusCode in the inner WebException response or
@@ -869,16 +863,16 @@
             Gets the specific error codes that may be returned by the service.
             </summary>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.#ctor(System.String,System.String)">
-            <summary>
-             Initializes a new instance of the exception class.
-            </summary>
-        </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.ToString">
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException.ToString">
             <summary>
             Creates and returns a string representation of the current exception.
             </summary>
             <returns>A string representation of the current exception.</returns>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.#ctor(System.String,System.String)">
+            <summary>
+             Initializes a new instance of the exception class.
+            </summary>
         </member>
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.RequestedUser">
             <summary>
@@ -889,6 +883,12 @@
             <summary>
             Gets the user returned by service.
             </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.ToString">
+            <summary>
+            Creates and returns a string representation of the current exception.
+            </summary>
+            <returns>A string representation of the current exception.</returns>
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior">
             <summary>
