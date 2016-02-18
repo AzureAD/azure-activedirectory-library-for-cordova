@@ -1,4 +1,8 @@
-0.6.1 - February 12, 2015
+0.6.2 - February 18, 2016
+
+* windows: fixed Windows Phone 8.1 arm build architecture compatibility issue
+
+0.6.1 - February 12, 2016
 
 * ios: fixed #16 The file `ADALiOS.entitlements` couldn’t be opened
 * ios: fixed #35 `acquireTokenSilentAsync` fails to return a token after a successful login
