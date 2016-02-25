@@ -63,7 +63,8 @@
         <source-file src="src/ios/CordovaAdalUtils.m" />
 
         <framework src="src/ios/ADALiOS.framework" custom="true"/>
-        <resource-file src="src/ios/ADALiOS.framework/Resources/ADALiOS.bundle" />
+        <resource-file src="src/ios/ADAL_iPhone_Storyboard.storyboard" />
+        <resource-file src="src/ios/ADAL_iPad_Storyboard.storyboard" />
 
         <resource-file src="src/ios/ADALiOS.entitlements" />
         <hook type="after_plugin_install" src="scripts/configureEntitlementsIos.js" />

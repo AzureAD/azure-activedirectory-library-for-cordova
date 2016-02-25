@@ -22,6 +22,8 @@ extern NSString* const ADAuthenticationErrorDomain;
 extern NSString* const ADInvalidArgumentDomain;
 /*! Error related to extracting authority from the 401 (Unauthorized) challenge response */
 extern NSString* const ADUnauthorizedResponseErrorDomain;
+/*! Error returned by Broker */
+extern NSString* const ADBrokerResponseErrorDomain;
 
 @interface ADAuthenticationError : NSError
 
@@ -54,5 +56,9 @@ extern NSString* const ADUnauthorizedResponseErrorDomain;
 /*! Generates an error from cancel operations. E.g. the user pressed "Cancel" button
  on the authorization UI page. */
 +(ADAuthenticationError*) errorFromCancellation;
+
+/*! Generates an error for the case that server redirects authentication process to a non-https url */
++ (ADAuthenticationError*)errorFromNonHttpsRedirect;
+
 
 @end
