@@ -742,6 +742,12 @@
              Initializes a new instance of the exception class.
             </summary>
         </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the exception class.
+            </summary>
+            <param name="exception">inner exception</param>
+        </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalException.#ctor">
             <summary>
              Initializes a new instance of the exception class.
@@ -926,6 +932,16 @@
             Notification for certain token cache interactions during token acquisition.
             </summary>
             <param name="args"></param>
+        </member>
+        <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.IEnumerableTokenCacheItems">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.EnumerableTokenCacheItems">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.TokenCacheItem">
             <summary>
