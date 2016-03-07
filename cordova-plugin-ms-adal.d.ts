@@ -1,7 +1,7 @@
-﻿// Type definitions for Active Directory Authentication Library (ADAL) plugin for Apache Cordova apps
+﻿// Type definitions for Active Directory Authentication Library (ADAL) plugin for Apache Cordova
 // Project: https://github.com/AzureAD/azure-activedirectory-library-for-cordova
-// Definitions by: [AUTHOR NAME] <[AUTHOR URL]>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// Definitions by: Kai Walter https://github.com/KaiWalter
+// Definitions: ...
 
 declare namespace Microsoft {
 
@@ -18,6 +18,10 @@ declare namespace Microsoft {
             uniqueId: string,
         }
 
+        interface ITokenCache {
+            contextAuthority: string
+        }
+
         interface ITokenCacheItem {
             accessToken: string,
             authority: string,
@@ -30,8 +34,8 @@ declare namespace Microsoft {
             userInfo: IUserInfo
         }
 
-        interface ITokenCache {
-            contextAuthority: string
+        interface IPromise {
+            then(doneCallBack: () => void, failCallBack?: (message: string) => void);
         }
 
         interface IPromiseTokenCacheItems {
@@ -42,11 +46,27 @@ declare namespace Microsoft {
             contextAuthority: string
 
             /**
+            * Clears the cache by deleting all the items.
+            *
+            * @returns {Promise} Promise either fulfilled when operation is completed or rejected with error.
+            */
+            clear(): IPromise;
+
+            /**
             * Gets all cached items.
             *
             * @returns {Promise} Promise either fulfilled with array of cached items or rejected with error.
             */
             readItems(): IPromiseTokenCacheItems;
+
+            /**
+            * Deletes cached item.
+            *
+            * @param   {TokenCacheItem}  item Cached item to delete from cache
+            *
+            * @returns {Promise} Promise either fulfilled when operation is completed or rejected with error.
+            */
+            deleteItem(item: ITokenCacheItem): IPromise;
         }
 
         interface IAuthenticationResult {
@@ -59,6 +79,25 @@ declare namespace Microsoft {
             statusCode: string,
             tenantId: string,
             userInfo: IUserInfo
+        }
+
+        class AuthenticationResult implements IAuthenticationResult {
+            accessToken: string;
+            accessTokenType: string;
+            expiresOn: Date;
+            idToken: string;
+            isMultipleResourceRefreshToken: boolean;
+            status: string;
+            statusCode: string;
+            tenantId: string;
+            userInfo: IUserInfo;
+
+            /**
+            * Creates authorization header for web requests.
+            *
+            * @returns {String} The authorization header.
+            */
+            createAuthorizationHeader(): string;
         }
 
         interface IPromiseAuthenticationResult {
@@ -107,11 +146,24 @@ declare namespace Microsoft {
         }
 
         class AuthenticationContext implements IAuthenticationContext {
-            authority: string
-            validateAuthority: boolean
-            tokenCache: TokenCache
+            authority: string;
+            validateAuthority: boolean;
+            tokenCache: TokenCache;
 
-            constructor(Authority: string, ValidateAuthority?: boolean);
+            /**
+            * Constructs context to use with known authority to get the token. It reuses existing context
+            * for this authority URL in native proxy or creates a new one if it doesn't exists.
+            * Corresponding native context will be created at first time when it will be needed.
+            *
+            * @param   {String}  authority         Authority url to send code and token requests
+            * @param   {Boolean} validateAuthority Validate authority before sending token request
+            *                                      When context is being created syncronously using this constructor
+            *                                      validateAuthority in native context will be disabled to prevent
+            *                                      context initialization failure
+            *
+            * @returns {Object}  Newly created authentication context.
+            */
+            constructor(authority: string, validateAuthority?: boolean);
 
             /**
             * Constructs context asynchronously to use with known authority to get the token.
