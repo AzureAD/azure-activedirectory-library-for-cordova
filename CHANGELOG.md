@@ -5,6 +5,7 @@
 * windows: upgraded ADAL native SDK version (2.22.302111727)
 * windows: fixed Windows Phone 8.1 arm build architecture compatibility issue
 * windows: fixed Windows Phone 8.1 deploy from Visual Studio issue
+* include TypeScript definition file
 
 0.6.1 - February 12, 2016
 
