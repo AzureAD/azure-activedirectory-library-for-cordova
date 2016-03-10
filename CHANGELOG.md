@@ -1,6 +1,10 @@
-0.6.2 - February 18, 2016
+0.6.2 - March 10, 2016
 
+* ios: upgraded ADAL native SDK version (1.2.5)
+* android: upgraded ADAL native SDK version (1.1.12)
+* windows: upgraded ADAL native SDK version (2.22.302111727)
 * windows: fixed Windows Phone 8.1 arm build architecture compatibility issue
+* windows: fixed Windows Phone 8.1 deploy from Visual Studio issue
 
 0.6.1 - February 12, 2016
 
