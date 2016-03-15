@@ -10,35 +10,44 @@ Here you can find the source code for the library.
 This plugin uses native SDKs for ADAL for each supported platform and provides single API across all platforms. Here is a quick usage sample:
 
 ```javascript
-var AuthenticationContext = Microsoft.ADAL.AuthenticationContext;
+var authority = "https://login.windows.net/common",
+    redirectUri = "http://MyDirectorySearcherApp",
+    resourceUri = "https://graph.windows.net",
+    clientId = "a5d92493-ae5a-4a9f-bcbf-9f1d354067d3";
 
-AuthenticationContext.createAsync(authority)
-.then(function (authContext) {
-    authContext.acquireTokenAsync(resourceUrl, appId, redirectUrl)
-    .then(function (authResponse) {
-        console.log("Token acquired: " + authResponse.accessToken);
-        console.log("Token will expire on: " + authResponse.expiresOn);
-    }, fail);
-}, fail);
-```
+// Shows user authentication dialog if required
+function authenticate(authCompletedCallback, errorCallback) {
+  var authContext = new Microsoft.ADAL.AuthenticationContext(authority);  
+  authContext.tokenCache.readItems().then(function (items) {
+    if (items.length > 0) {
+        authority = items[0].authority;
+        authContext = new Microsoft.ADAL.AuthenticationContext(authority);
+    }
+    // Attempt to authorize user silently
+    authContext.acquireTokenSilentAsync(resourceUri, clientId)
+    .then(authCompletedCallback, function () {
+        // We require user cridentials so triggers authentication dialog
+        authContext.acquireTokenAsync(resourceUri, clientId, redirectUri)
+        .then(authCompletedCallback, errorCallback);
+    });
+  });
+};
 
-__Note__: You can use `AuthenticationContext` synchronous constructor as well:
-
-```javascript
-authContext = new AuthenticationContext(authority);
-authContext.acquireTokenAsync(resourceUrl, appId, redirectUrl).then(function (authRes) {
-    console.log(authRes.accessToken);
-    ...
+authenticate(function(authResponse) {
+  console.log("Token acquired: " + authResponse.accessToken);
+  console.log("Token will expire on: " + authResponse.expiresOn);
+}, function(err) {
+  console.log("Failed to authenticate: " + err);
 });
 ```
 
-For more API documentation see [sample application](https://github.com/AzureAD/azure-activedirectory-library-for-cordova/tree/master/sample) and JSDoc for exposed functionality stored in [www](https://github.com/AzureAD/azure-activedirectory-library-for-cordova/tree/master/www) subfolder.
+For more API documentation and examples see [Azure AD Cordova Getting Started](https://azure.microsoft.com/en-us/documentation/articles/active-directory-devquickstarts-cordova/) and JSDoc for exposed functionality stored in [www](https://github.com/AzureAD/azure-activedirectory-library-for-cordova/tree/master/www) subfolder.
 
 ## Supported platforms
 
   * Android
   * iOS
-  * Windows (Windows 8.0, Windows 8.1 and Windows Phone 8.1)
+  * Windows (Windows 8.0, Windows 8.1, Windows 10 and Windows Phone 8.1)
 
 ## Known issues and workarounds
 
