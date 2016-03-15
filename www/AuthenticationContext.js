@@ -64,9 +64,7 @@ AuthenticationContext.createAsync = function (authority, validateAuthority) {
 };
 
 /**
- * Acquires token using interactive flow if needed. It checks the cache to return existing result
- * if not expired. It tries to use refresh token if available. If it fails to get token with
- * refresh token, it will remove this refresh token from cache and start authentication.
+ * Acquires token using interactive flow. It always shows UI and skips token from cache.
  *
  * @param   {String}  resourceUrl Resource identifier
  * @param   {String}  clientId    Client (application) identifier
