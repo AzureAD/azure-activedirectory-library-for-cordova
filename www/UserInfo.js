@@ -55,7 +55,8 @@ UserInfo.fromJWT = function function_name (jwtToken) {
     // In case when identity provider is not specified in token, we use 'issuer' field ('iss' claim) of token
     result.identityProvider = token.idp || token.iss;
     result.passwordChangeUrl = token.pwd_url;
-    result.passwordExpiresOn = token.exp ? Date(token.exp) : null;
+    // JWT 'exp' is in seconds, Date requires value in milliseconds
+    result.passwordExpiresOn = token.exp ? new Date(token.exp * 1000) : null;
     result.uniqueId = token.unique_name;
     result.userId = token.oid;
 
