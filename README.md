@@ -76,6 +76,11 @@ It **always shows UI** and skips token from cache.
 - __userId__: User identifier. _(String)_ [Optional]
 - __extraQueryParameters__: Extra query parameters. Parameters should be escaped before passing to this method (e.g. using 'encodeURI()') _(String)_ [Optional]
 
+__Note__: Those with experience in using native ADAL libraries should pay attention as the plugin uses `PromptBehaviour.Always`
+when calling `AcquireToken` method and native libraries use `PromptBehaviour.Auto` by default. As a result
+the plugin does not check the cache for existing access or refresh token. This is special design decision
+so that `AcquireToken` is always showing a UX and `AcquireTokenSilent` never does so.
+
 #### Example
 ```
 var authContext = new Microsoft.ADAL.AuthenticationContext("https://login.windows.net/common");
