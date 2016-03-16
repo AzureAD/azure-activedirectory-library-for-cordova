@@ -128,6 +128,18 @@ authContext.tokenCache.readItems().then(function (items) {
 
 ## Known issues and workarounds
 
+## How to sign out
+
+Similar to native labraries the plugin does not provide special method to sign out as it depends on server/application logic.
+The recomendation here is
+
+1. Step1: clear cache
+
+    var authContext = new Microsoft.ADAL.AuthenticationContext("https://login.windows.net/common");
+    authContext.tokenCache.clear();
+1. Step2: make `XmlHttpRequest` (or open InAppBrowser instance) pointing to the sign out url.
+In most cases the url should look like the following: `https://login.windows.net/{tenantid or "common"}/oauth2/logout?post_logout_redirect_uri={URL}`
+
 ## 'Class not registered' error on Windows
 
 If you are using Visual Studio 2013 and see 'WinRTError: Class not registered' runtime error on Windows make sure Visual Studio [Update 5](https://www.visualstudio.com/news/vs2013-update5-vs) is installed.
