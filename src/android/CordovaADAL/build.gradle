@@ -13,5 +13,5 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compile('com.microsoft.aad:adal:1.1.12') {}
+    compile('com.microsoft.aad:adal:1.1.16') {}
 }

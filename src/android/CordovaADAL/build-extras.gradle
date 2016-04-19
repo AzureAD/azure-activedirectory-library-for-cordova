@@ -12,7 +12,7 @@ configurations.compile.dependencies.clear()
 
 // add required dependency
 dependencies {
-    compile('com.microsoft.aad:adal:1.1.12') {}
+    compile('com.microsoft.aad:adal:1.1.16') {}
 }
 
 // helped methof to print all compile dependency; use 'gradle sSP' from command line
