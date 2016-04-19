@@ -386,4 +386,24 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         });
     });
 
+    if (cordova.platformId === 'android') { // android specific logic
+
+        createActionButton("setUseBroker(true)", function () {
+            Microsoft.ADAL.AuthenticationSettings.setUseBroker(true)
+            .then(function (res) {
+                contentEl.innerHTML = res;
+            }, function (err) {
+                contentEl.innerHTML = err;
+            });
+        });
+
+        createActionButton("setUseBroker(false)", function () {
+            Microsoft.ADAL.AuthenticationSettings.setUseBroker(false)
+            .then(function (res) {
+                contentEl.innerHTML = res;
+            }, function (err) {
+                contentEl.innerHTML = err;
+            });
+        });
+    }
 };

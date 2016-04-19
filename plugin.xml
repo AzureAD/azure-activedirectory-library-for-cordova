@@ -40,6 +40,11 @@
             <uses-permission android:name="android.permission.USE_CREDENTIALS" />
         </config-file>
 
+        <!-- AuthenticationSettings is currently Android specific -->
+        <js-module name="AuthenticationSettings" src="www/AuthenticationSettings.js">
+            <clobbers target="Microsoft.ADAL.AuthenticationSettings" />
+        </js-module>
+
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <activity android:name="com.microsoft.aad.adal.AuthenticationActivity" ></activity>
         </config-file>

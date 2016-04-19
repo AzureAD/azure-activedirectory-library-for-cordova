@@ -220,6 +220,14 @@ It will add all needed application capabilities and toggle authContext to suppor
 
 __Note__: You should not normally use `adal-use-corporate-network` as it adds capabilities, which prevents an app from being published in the Windows Store.
 
+## Android Quirks ##
+### Broker support
+The following method should be used to enable broker component support (delivered with Intune's Company portal app). Read [ADAL for Android](https://github.com/AzureAD/azure-activedirectory-library-for-android) to understand broker concept in more details.
+
+`Microsoft.ADAL.AuthenticationSettings.setUseBroker(false)`
+
+__Note__: Developer needs to register special redirectUri for broker usage. RedirectUri is in the format of `msauth://packagename/Base64UrlencodedSignature`
+
 ## Copyrights ##
 Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
 

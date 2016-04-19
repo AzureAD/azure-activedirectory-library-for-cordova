@@ -93,6 +93,10 @@ public class CordovaAdalPlugin extends CordovaPlugin {
             boolean isMultipleResourceRefreshToken = args.getBoolean(5);
 
             return deleteTokenCacheItem(authority, itemAuthority, resource, clientId, userId, isMultipleResourceRefreshToken);
+        } else if (action.equals("setUseBroker")) {
+
+            boolean useBroker = args.getBoolean(0);
+            return setUseBroker(useBroker);
         }
 
         return false;
@@ -212,6 +216,20 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
         return true;
     }
+
+    private boolean setUseBroker(boolean useBroker) {
+
+        try {
+            AuthenticationSettings.INSTANCE.setUseBroker(useBroker);
+        } catch (Exception e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
+            return true;
+        }
+
+        callbackContext.success();
+        return true;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
