@@ -7,9 +7,14 @@
 
 package com.microsoft.aad.adal;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +31,9 @@ import static com.microsoft.aad.adal.SimpleSerialization.tokenItemToJSON;
 public class CordovaAdalPlugin extends CordovaPlugin {
 
     private static final PromptBehavior SHOW_PROMPT_ALWAYS = PromptBehavior.Always;
+
+    private static final int GET_ACCOUNTS_PERMISSION_REQ_CODE = 0;
+    private static final String PERMISSION_DENIED_ERROR =  "Permissions denied";
 
     private final Hashtable<String, AuthenticationContext> contexts = new Hashtable<String, AuthenticationContext>();
     private AuthenticationContext currentContext;
@@ -221,6 +229,17 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
         try {
             AuthenticationSettings.INSTANCE.setUseBroker(useBroker);
+
+            // Android 6.0 "Marshmallow" introduced a new permissions model where the user can turn on and off permissions as necessary.
+            // This means that applications must handle these permission in run time.
+            // http://cordova.apache.org/docs/en/latest/guide/platforms/android/plugin.html#android-permissions
+            if (useBroker && Build.VERSION.SDK_INT >= 23 /* Build.VERSION_CODES.M */ ) {
+
+                requestBrokerPermissions();
+                // Cordova callback will be handled by requestBrokerPermissions method
+                return true;
+            }
+
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -230,6 +249,17 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
+    private void requestBrokerPermissions() {
+
+        // USE_CREDENTIALS and MANAGE_ACOUNTS are deprecated and not required
+        if(PermissionHelper.hasPermission(this, Manifest.permission.GET_ACCOUNTS)) { // android.permission.GET_ACCOUNTS
+            // already granted
+            callbackContext.success();
+            return;
+        }
+
+        PermissionHelper.requestPermission(this, GET_ACCOUNTS_PERMISSION_REQ_CODE, Manifest.permission.GET_ACCOUNTS);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -237,6 +267,20 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         if (currentContext != null) {
             currentContext.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    public void onRequestPermissionResult(int requestCode, String[] permissions,
+                                          int[] grantResults) throws JSONException
+    {
+        for(int r:grantResults)
+        {
+            if(r == PackageManager.PERMISSION_DENIED)
+            {
+                this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, PERMISSION_DENIED_ERROR));
+                return;
+            }
+        }
+        callbackContext.success();
     }
 
     private AuthenticationContext getOrCreateContext (String authority, boolean validateAuthority) throws NoSuchPaddingException, NoSuchAlgorithmException {
