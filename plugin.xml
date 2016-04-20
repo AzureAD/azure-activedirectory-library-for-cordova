@@ -12,6 +12,8 @@
     <repo>https://github.com/AzureAD/azure-activedirectory-library-for-cordova</repo>
     <issue>https://github.com/AzureAD/azure-activedirectory-library-for-cordova/issues</issue>
 
+    <dependency id="cordova-plugin-compat" version="^1.0.0" />
+
     <js-module name="utility" src="www/utility.js">
         <runs />
     </js-module>
@@ -49,9 +51,12 @@
             <activity android:name="com.microsoft.aad.adal.AuthenticationActivity" ></activity>
         </config-file>
 
-        <framework src="src/android/CordovaADAL" custom="true" />
+        <framework src="com.microsoft.aad:adal:1.1.16" />
 
-        <hook type="after_plugin_install" src="scripts/afterPluginInstall-android.js" />
+        <source-file src="src/android/CordovaAdalPlugin.java" target-dir="src/com/microsoft/aad/adal" />
+        <source-file src="src/android/DefaultAuthenticationCallback.java" target-dir="src/com/microsoft/aad/adal" />
+        <source-file src="src/android/SimpleSerialization.java" target-dir="src/com/microsoft/aad/adal" />
+
     </platform>
 
     <platform name="ios">
