@@ -45,7 +45,7 @@ For more API documentation and examples see [Azure AD Cordova Getting Started](h
 
 ## Supported platforms
 
-  * Android
+  * Android (OS 4.0.3 and higher)
   * iOS
   * Windows (Windows 8.0, Windows 8.1, Windows 10 and Windows Phone 8.1)
 

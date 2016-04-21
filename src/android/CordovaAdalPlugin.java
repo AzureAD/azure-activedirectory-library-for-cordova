@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -19,12 +20,18 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import static com.microsoft.aad.adal.SimpleSerialization.tokenItemToJSON;
 
@@ -34,10 +41,25 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
     private static final int GET_ACCOUNTS_PERMISSION_REQ_CODE = 0;
     private static final String PERMISSION_DENIED_ERROR =  "Permissions denied";
+    private static final String SECRET_KEY =  "com.microsoft.aad.CordovaADAL";
 
     private final Hashtable<String, AuthenticationContext> contexts = new Hashtable<String, AuthenticationContext>();
     private AuthenticationContext currentContext;
     private CallbackContext callbackContext;
+
+    public CordovaAdalPlugin() {
+
+        // Android API < 18 does not support AndroidKeyStore so ADAL requires
+        // some extra work to crete and pass secret key to ADAL.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            try {
+                SecretKey secretKey = this.createSecretKey(SECRET_KEY);
+                AuthenticationSettings.INSTANCE.setSecretKey(secretKey.getEncoded());
+            } catch (Exception e) {
+                Log.w("CordovaAdalPlugin", "Unable to create secret key: " + e.getMessage());
+            }
+        }
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -299,5 +321,12 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
     private AuthenticationContext getOrCreateContext (String authority) throws NoSuchPaddingException, NoSuchAlgorithmException {
         return getOrCreateContext(authority, false);
+    }
+
+    private SecretKey createSecretKey(String key) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeySpecException {
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithSHA256And256BitAES-CBC-BC");
+        SecretKey tempkey = keyFactory.generateSecret(new PBEKeySpec(key.toCharArray(), "abcdedfdfd".getBytes("UTF-8"), 100, 256));
+        SecretKey secretKey = new SecretKeySpec(tempkey.getEncoded(), "AES");
+        return secretKey;
     }
 }
