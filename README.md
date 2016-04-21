@@ -9,11 +9,7 @@ Here you can find the source code for the library.
 
 This plugin uses native SDKs for ADAL for each supported platform and provides single API across all platforms. Here is a quick usage sample:
 
-```javascript
-var authority = "https://login.windows.net/common",
-    redirectUri = "http://MyDirectorySearcherApp",
-    resourceUri = "https://graph.windows.net",
-    clientId = "a5d92493-ae5a-4a9f-bcbf-9f1d354067d3";
+```javascriptMicrosoft.ADAL.AuthenticationSettings.setUseBroker(false)
 
 // Shows user authentication dialog if required
 function authenticate(authCompletedCallback, errorCallback) {
@@ -224,7 +220,7 @@ __Note__: You should not normally use `adal-use-corporate-network` as it adds ca
 ### Broker support
 The following method should be used to enable broker component support (delivered with Intune's Company portal app). Read [ADAL for Android](https://github.com/AzureAD/azure-activedirectory-library-for-android) to understand broker concept in more details.
 
-`Microsoft.ADAL.AuthenticationSettings.setUseBroker(false)`
+`Microsoft.ADAL.AuthenticationSettings.setUseBroker(true);`
 
 __Note__: Developer needs to register special redirectUri for broker usage. RedirectUri is in the format of `msauth://packagename/Base64UrlencodedSignature`
 
