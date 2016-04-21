@@ -285,7 +285,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             context = ctx;
             contentEl.innerHTML = JSON.stringify(ctx, null, 4);
         }, function (err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -303,7 +303,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
             contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
         }, function(err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -332,12 +332,12 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
                 contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
                 contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
             }, function(err) {
-                contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+                contentEl.innerHTML = err ? err.message : "";
             });
 
             contentEl.innerHTML = JSON.stringify(items, null, 4);
         }, function(err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -353,7 +353,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
             contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
         }, function(err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -368,7 +368,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         .then(function function_name (items) {
             contentEl.innerHTML = JSON.stringify(items, null, 4);
         }, function(err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -382,7 +382,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         context.tokenCache.clear().then(function() {
             contentEl.innerHTML = "Logged out";
         }, function(err) {
-            contentEl.innerHTML = err ? err.error + ": " + err.errorDescription : "";
+            contentEl.innerHTML = err ? err.message : "";
         });
     });
 
@@ -393,7 +393,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             .then(function (res) {
                 contentEl.innerHTML = res;
             }, function (err) {
-                contentEl.innerHTML = err;
+                contentEl.innerHTML = err ? err.message : "";
             });
         });
 
@@ -402,7 +402,7 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             .then(function (res) {
                 contentEl.innerHTML = res;
             }, function (err) {
-                contentEl.innerHTML = err;
+                contentEl.innerHTML = err ? err.message : "";
             });
         });
     }
