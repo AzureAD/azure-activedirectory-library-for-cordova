@@ -1,3 +1,13 @@
+0.7.0 - April 27, 2016
+
+* fixed incorrect token expiring issue (#28)
+* android: dropped ant support
+* android: added setUseBroker method support (broker is now disabled by default)
+* android: fixed broker permissions issue when targeting Api 23 or higher
+* android: upgraded ADAL native SDK version (1.1.17)
+* android: made cache working on Android 4.2.x and below
+* windows: fixed missing capability in package.windows10.appxmanifest in case of SSO enabled
+
 0.6.2 - March 10, 2016
 
 * ios: upgraded ADAL native SDK version (1.2.5)
