@@ -159,7 +159,7 @@ public class CordovaAdalPlugin extends CordovaPlugin {
             ITokenCacheStore cache = authContext.getCache();
             if (cache instanceof ITokenStoreQuery) {
 
-                ArrayList<TokenCacheItem> tokensForUserId = ((ITokenStoreQuery)cache).getTokensForUser(userId);
+                ArrayList<TokenCacheItem> tokensForUserId = (ArrayList<TokenCacheItem>)((ITokenStoreQuery)cache).getTokensForUser(userId);
                 if (tokensForUserId.size() > 0) {
                     // Try to acquire alias for specified userId
                     userId = tokensForUserId.get(0).getUserInfo().getDisplayableId();
