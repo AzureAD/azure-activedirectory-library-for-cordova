@@ -23,9 +23,9 @@ import org.json.JSONException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -159,7 +159,7 @@ public class CordovaAdalPlugin extends CordovaPlugin {
             ITokenCacheStore cache = authContext.getCache();
             if (cache instanceof ITokenStoreQuery) {
 
-                ArrayList<TokenCacheItem> tokensForUserId = ((ITokenStoreQuery)cache).getTokensForUser(userId);
+                List<TokenCacheItem> tokensForUserId = ((ITokenStoreQuery)cache).getTokensForUser(userId);
                 if (tokensForUserId.size() > 0) {
                     // Try to acquire alias for specified userId
                     userId = tokensForUserId.get(0).getUserInfo().getDisplayableId();
