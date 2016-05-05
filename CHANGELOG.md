@@ -1,3 +1,7 @@
+0.7.1 - May 5, 2016
+* android: bump ADAL SDK version to 1.18
+* android: Fixing build error caused by improper type casting #62
+
 0.7.0 - April 27, 2016
 
 * fixed incorrect token expiring issue (#28)
