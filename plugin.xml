@@ -51,7 +51,7 @@
             <activity android:name="com.microsoft.aad.adal.AuthenticationActivity" ></activity>
         </config-file>
 
-        <framework src="com.microsoft.aad:adal:1.1.17" />
+        <framework src="com.microsoft.aad:adal:1.1.18" />
 
         <source-file src="src/android/CordovaAdalPlugin.java" target-dir="src/com/microsoft/aad/adal" />
         <source-file src="src/android/DefaultAuthenticationCallback.java" target-dir="src/com/microsoft/aad/adal" />
