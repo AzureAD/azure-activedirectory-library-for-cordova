@@ -1,0 +1,19 @@
+
+# Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+
+install:
+  - npm install -g cordova
+# we install paramedic from git repo as we require support for extra args
+# to run different target windows platform which is not released yet.
+  - npm install -g cordova-paramedic@https://github.com/apache/cordova-paramedic
+
+build: off
+
+test_script:
+  - node --version
+  - npm --version
+  - msbuild /version
+  - cordova-paramedic --config .\tests\paramedic-configs\.paramedic.config.win81.js
+  - cordova-paramedic --config .\tests\paramedic-configs\.paramedic.config.win10.js
+  - cordova-paramedic --config .\tests\paramedic-configs\.paramedic.config.wp81.js
+  - cordova-paramedic --platform android --plugin . --justbuild
