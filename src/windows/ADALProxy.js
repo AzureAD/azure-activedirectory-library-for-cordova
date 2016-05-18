@@ -72,8 +72,9 @@ var ADALProxy = {
         }
     },
 
-    getOrCreateCtx: function(authority) {
+    getOrCreateCtx: function(authority, validateAuthority) {
         var d = new Deferred();
+        validateAuthority = validateAuthority !== false; // true by default
 
         if (typeof ctxCache[authority] !== 'undefined') {
             d.resolve(ctxCache[authority]);
@@ -82,7 +83,7 @@ var ADALProxy = {
                 d.resolve(ctx);
             }, function (err) {
                 d.reject(err);
-            }, [authority]);
+            }, [authority, validateAuthority]);
         }
 
         return d;
@@ -91,16 +92,17 @@ var ADALProxy = {
     acquireTokenAsync: function (win, fail, args) {
         try {
             var authority = args[0];
-            var resourceUrl = args[1];
-            var clientId = args[2];
-            var redirectUrl = new Windows.Foundation.Uri(args[3]);
-            var userId = args[4];
-            var extraQueryParameters = args[5];
+            var validateAuthority = args[1];
+            var resourceUrl = args[2];
+            var clientId = args[3];
+            var redirectUrl = new Windows.Foundation.Uri(args[4]);
+            var userId = args[5];
+            var extraQueryParameters = args[6];
 
             var userIdentifier;
             var displayName;
 
-            ADALProxy.getOrCreateCtx(authority).then(function (context) {
+            ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
                 displayName = mapUserUniqueIdToDisplayName(context, userId);
 
                 if (typeof displayName !== 'undefined') {
@@ -171,13 +173,14 @@ var ADALProxy = {
     acquireTokenSilentAsync: function (win, fail, args) {
         try {
             var authority = args[0];
-            var resourceUrl = args[1];
-            var clientId = args[2];
-            var userId = args[3];
+            var validateAuthority = args[1];
+            var resourceUrl = args[2];
+            var clientId = args[3];
+            var userId = args[4];
 
             var userIdentifier = wrapUserId(userId, UNIQUE_ID);
 
-            ADALProxy.getOrCreateCtx(authority).then(function (context) {
+            ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
                 context.acquireTokenSilentAsync(resourceUrl, clientId, userIdentifier).then(function (res) {
                     handleAuthResult(win, fail, res);
                 }, fail);
@@ -190,8 +193,9 @@ var ADALProxy = {
     tokenCacheClear: function (win, fail, args) {
         try {
             var authority = args[0];
+            var validateAuthority = args[1];
 
-            ADALProxy.getOrCreateCtx(authority).then(function (context) {
+            ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
                 context.tokenCache.clear();
                 ctxCache = {};
                 win();
@@ -204,8 +208,9 @@ var ADALProxy = {
     tokenCacheReadItems: function (win, fail, args) {
         try {
             var authority = args[0];
+            var validateAuthority = args[1];
 
-            ADALProxy.getOrCreateCtx(authority).then(function (context) {
+            ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
                 win(context.tokenCache.readItems().map(function(item) {
                     var copy = {};
 
@@ -257,13 +262,14 @@ var ADALProxy = {
     tokenCacheDeleteItem: function (win, fail, args) {
         try {
             var contextAuthority = args[0];
-            var itemAuthority = args[1];
-            var itemResource = args[2];
-            var itemClientId = args[3];
-            var itemUserId = args[4];
-            var itemIsMultipleResourceRefreshToken = args[5];
+            var validateAuthority = args[1];
+            var itemAuthority = args[2];
+            var itemResource = args[3];
+            var itemClientId = args[4];
+            var itemUserId = args[5];
+            var itemIsMultipleResourceRefreshToken = args[6];
 
-            ADALProxy.getOrCreateCtx(contextAuthority).then(function (context) {
+            ADALProxy.getOrCreateCtx(contextAuthority, validateAuthority).then(function (context) {
                 var allItems = context.tokenCache.readItems();
 
                 for (var i = 0; i < allItems.length; i++) {

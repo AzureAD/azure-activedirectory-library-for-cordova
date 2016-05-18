@@ -214,9 +214,7 @@ module.exports.defineAutoTests = function () {
         });
 
         it("Should contain proper fields and methods", function () {
-            expect(cache.contextAuthority).toBeDefined();
-            expect(typeof cache.contextAuthority).toBe("string");
-            expect(cache.contextAuthority).toEqual(context.authority);
+            expect(cache.authContext).toBeDefined();
             expect(typeof cache.clear).toBe("function");
             expect(typeof cache.readItems).toBe("function");
             expect(typeof cache.deleteItem).toBe("function");

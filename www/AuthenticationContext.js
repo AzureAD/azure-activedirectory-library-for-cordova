@@ -32,7 +32,7 @@ function AuthenticationContext(authority, validateAuthority) {
 
     this.authority = authority;
     this.validateAuthority = validateAuthority;
-    this.tokenCache = new TokenCache(this.authority);
+    this.tokenCache = new TokenCache(this);
 }
 
 /**
@@ -82,7 +82,8 @@ AuthenticationContext.prototype.acquireTokenAsync = function (resourceUrl, clien
 
     var d = new Deferred();
 
-    bridge.executeNativeMethod('acquireTokenAsync', [this.authority, resourceUrl, clientId, redirectUrl, userId, extraQueryParameters])
+    bridge.executeNativeMethod('acquireTokenAsync', [this.authority, this.validateAuthority, resourceUrl, clientId, redirectUrl,
+        userId, extraQueryParameters])
     .then(function(authResult){
         d.resolve(new AuthenticationResult(authResult));
     }, function(err) {
@@ -109,7 +110,7 @@ AuthenticationContext.prototype.acquireTokenSilentAsync = function (resourceUrl,
 
     var d = new Deferred();
 
-    bridge.executeNativeMethod('acquireTokenSilentAsync', [this.authority, resourceUrl, clientId, userId])
+    bridge.executeNativeMethod('acquireTokenSilentAsync', [this.authority, this.validateAuthority, resourceUrl, clientId, userId])
     .then(function(authResult){
         d.resolve(new AuthenticationResult(authResult));
     }, function(err) {

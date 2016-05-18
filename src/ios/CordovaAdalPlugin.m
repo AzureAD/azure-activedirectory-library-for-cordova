@@ -39,14 +39,15 @@
         @try
         {
             NSString *authority = ObjectOrNil([command.arguments objectAtIndex:0]);
-            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:1]);
-            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:2]);
-            NSURL *redirectUri = [NSURL URLWithString:[command.arguments objectAtIndex:3]];
-            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:4]);
-            NSString *extraQueryParameters = ObjectOrNil([command.arguments objectAtIndex:5]);
+            BOOL validateAuthority = [[command.arguments objectAtIndex:1] boolValue];
+            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:2]);
+            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:3]);
+            NSURL *redirectUri = [NSURL URLWithString:[command.arguments objectAtIndex:4]];
+            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:5]);
+            NSString *extraQueryParameters = ObjectOrNil([command.arguments objectAtIndex:6]);
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
-                                                                           validateAuthority:FALSE];
+                                                                           validateAuthority:validateAuthority];
 
             // TODO iOS sdk requires user name instead of guid so we should map provided id to a known user name
             userId = [CordovaAdalUtils mapUserIdToUserName:authContext
@@ -81,12 +82,13 @@
         @try
         {
             NSString *authority = ObjectOrNil([command.arguments objectAtIndex:0]);
-            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:1]);
-            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:2]);
-            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:3]);
+            BOOL validateAuthority = [[command.arguments objectAtIndex:1] boolValue];
+            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:2]);
+            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:3]);
+            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:4]);
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
-                                                                           validateAuthority:FALSE];
+                                                                           validateAuthority:validateAuthority];
 
             // TODO iOS sdk requires user name instead of guid so we should map provided id to a known user name
             userId = [CordovaAdalUtils mapUserIdToUserName:authContext
@@ -120,9 +122,10 @@
             ADAuthenticationError *error;
 
             NSString *authority = ObjectOrNil([command.arguments objectAtIndex:0]);
+            BOOL validateAuthority = [[command.arguments objectAtIndex:1] boolValue];
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
-                                                                           validateAuthority:FALSE];
+                                                                           validateAuthority:validateAuthority];
 
             [authContext.tokenCacheStore removeAllWithError:&error];
 
@@ -152,9 +155,10 @@
             ADAuthenticationError *error;
 
             NSString *authority = ObjectOrNil([command.arguments objectAtIndex:0]);
+            BOOL validateAuthority = [[command.arguments objectAtIndex:1] boolValue];
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
-                                                                           validateAuthority:FALSE];
+                                                                           validateAuthority:validateAuthority];
 
             NSArray *cacheItems = [authContext.tokenCacheStore allItemsWithError:&error];
 
@@ -191,13 +195,14 @@
             ADAuthenticationError *error;
 
             NSString *authority = ObjectOrNil([command.arguments objectAtIndex:0]);
-            NSString *itemAuthority = ObjectOrNil([command.arguments objectAtIndex:1]);
-            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:2]);
-            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:3]);
-            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:4]);
+            BOOL validateAuthority = [[command.arguments objectAtIndex:1] boolValue];
+            NSString *itemAuthority = ObjectOrNil([command.arguments objectAtIndex:2]);
+            NSString *resourceId = ObjectOrNil([command.arguments objectAtIndex:3]);
+            NSString *clientId = ObjectOrNil([command.arguments objectAtIndex:4]);
+            NSString *userId = ObjectOrNil([command.arguments objectAtIndex:5]);
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
-                                                                           validateAuthority:FALSE];
+                                                                           validateAuthority:validateAuthority];
 
             // TODO iOS sdk requires user name instead of guid so we should map provided id to a known user name
             userId = [CordovaAdalUtils mapUserIdToUserName:authContext

@@ -10,8 +10,8 @@ var checkArgs = require('cordova/argscheck').checkArgs;
 /**
  * Token cache class used by {AuthenticationContext} to store access and refresh tokens.
  */
-function TokenCache(contextAuthority) {
-    this.contextAuthority = contextAuthority;
+function TokenCache(authContext) {
+    this.authContext = authContext;
 }
 
 /**
@@ -20,7 +20,7 @@ function TokenCache(contextAuthority) {
  * @returns {Promise} Promise either fulfilled when operation is completed or rejected with error.
  */
 TokenCache.prototype.clear = function () {
-    return bridge.executeNativeMethod('tokenCacheClear', [this.contextAuthority]);
+    return bridge.executeNativeMethod('tokenCacheClear', [this.authContext.authority, this.authContext.validateAuthority]);
 };
 
 /**
@@ -34,7 +34,7 @@ TokenCache.prototype.readItems = function () {
 
     var d = new Deferred();
 
-    bridge.executeNativeMethod('tokenCacheReadItems', [this.contextAuthority])
+    bridge.executeNativeMethod('tokenCacheReadItems', [this.authContext.authority, this.authContext.validateAuthority])
     .then(function (tokenCacheItems) {
         tokenCacheItems.forEach(function (item) {
             result.push(new TokenCacheItem(item));
@@ -58,7 +58,8 @@ TokenCache.prototype.deleteItem = function (item) {
     checkArgs('*', 'TokenCache.deleteItem', arguments);
 
     var args = [
-        this.contextAuthority,
+        this.authContext.authority,
+        this.authContext.validateAuthority,
         item.authority,
         item.resource,
         item.clientId,

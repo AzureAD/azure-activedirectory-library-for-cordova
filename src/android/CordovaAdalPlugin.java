@@ -79,50 +79,55 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         } else if (action.equals("acquireTokenAsync")) {
 
             String authority = args.getString(0);
-            String resourceUrl = args.getString(1);
-            String clientId = args.getString(2);
-            String redirectUrl = args.getString(3);
-            String userId = args.optString(4, null);
+            boolean validateAuthority = args.optBoolean(1, true);
+            String resourceUrl = args.getString(2);
+            String clientId = args.getString(3);
+            String redirectUrl = args.getString(4);
+            String userId = args.optString(5, null);
             userId = userId.equals("null") ? null : userId;
-            String extraQueryParams = args.optString(5, null);
+            String extraQueryParams = args.optString(6, null);
             extraQueryParams = extraQueryParams.equals("null") ? null : extraQueryParams;
 
-            return acquireTokenAsync(authority, resourceUrl, clientId, redirectUrl, userId, extraQueryParams);
+            return acquireTokenAsync(authority, validateAuthority, resourceUrl, clientId, redirectUrl, userId, extraQueryParams);
 
         } else if (action.equals("acquireTokenSilentAsync")) {
 
             String authority = args.getString(0);
-            String resourceUrl = args.getString(1);
-            String clientId = args.getString(2);
-            String userId = args.getString(3);
+            boolean validateAuthority = args.optBoolean(1, true);
+            String resourceUrl = args.getString(2);
+            String clientId = args.getString(3);
+            String userId = args.getString(4);
 
             // This is a workaround for Cordova bridge issue. When null us passed from JS side
             // it is being translated to "null" string
             userId = userId.equals("null") ? null : userId;
 
-            return acquireTokenSilentAsync(authority, resourceUrl, clientId, userId);
+            return acquireTokenSilentAsync(authority, validateAuthority, resourceUrl, clientId, userId);
 
         } else if (action.equals("tokenCacheClear")){
 
             String authority = args.getString(0);
-            return clearTokenCache(authority);
+            boolean validateAuthority = args.optBoolean(1, true);
+            return clearTokenCache(authority, validateAuthority);
 
         } else if (action.equals("tokenCacheReadItems")){
 
             String authority = args.getString(0);
-            return readTokenCacheItems(authority);
+            boolean validateAuthority = args.optBoolean(1, true);
+            return readTokenCacheItems(authority, validateAuthority);
 
         } else if (action.equals("tokenCacheDeleteItem")){
 
             String authority = args.getString(0);
-            String itemAuthority = args.getString(1);
-            String resource = args.getString(2);
+            boolean validateAuthority = args.optBoolean(1, true);
+            String itemAuthority = args.getString(2);
+            String resource = args.getString(3);
             resource = resource.equals("null") ? null : resource;
-            String clientId = args.getString(3);
-            String userId = args.getString(4);
-            boolean isMultipleResourceRefreshToken = args.getBoolean(5);
+            String clientId = args.getString(4);
+            String userId = args.getString(5);
+            boolean isMultipleResourceRefreshToken = args.getBoolean(6);
 
-            return deleteTokenCacheItem(authority, itemAuthority, resource, clientId, userId, isMultipleResourceRefreshToken);
+            return deleteTokenCacheItem(authority, validateAuthority, itemAuthority, resource, clientId, userId, isMultipleResourceRefreshToken);
         } else if (action.equals("setUseBroker")) {
 
             boolean useBroker = args.getBoolean(0);
@@ -145,11 +150,11 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
-    private boolean acquireTokenAsync(String authority, String resourceUrl, String clientId, String redirectUrl, String userId, String extraQueryParams) {
+    private boolean acquireTokenAsync(String authority, boolean validateAuthority, String resourceUrl, String clientId, String redirectUrl, String userId, String extraQueryParams) {
 
         final AuthenticationContext authContext;
         try{
-            authContext = getOrCreateContext(authority);
+            authContext = getOrCreateContext(authority, validateAuthority);
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -174,11 +179,11 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
     }
 
-    private boolean acquireTokenSilentAsync(String authority, String resourceUrl, String clientId, String userId) {
+    private boolean acquireTokenSilentAsync(String authority, boolean validateAuthority, String resourceUrl, String clientId, String userId) {
 
         final AuthenticationContext authContext;
         try{
-            authContext = getOrCreateContext(authority);
+            authContext = getOrCreateContext(authority, validateAuthority);
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -188,11 +193,11 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
-    private boolean readTokenCacheItems(String authority) throws JSONException {
+    private boolean readTokenCacheItems(String authority, boolean validateAuthority) throws JSONException {
 
         final AuthenticationContext authContext;
         try{
-            authContext = getOrCreateContext(authority);
+            authContext = getOrCreateContext(authority, validateAuthority);
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -215,12 +220,12 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
-    private boolean deleteTokenCacheItem(String authority, String itemAuthority,  String resource,
+    private boolean deleteTokenCacheItem(String authority, boolean validateAuthority, String itemAuthority,  String resource,
                                          String clientId, String userId, boolean isMultipleResourceRefreshToken) {
 
         final AuthenticationContext authContext;
         try{
-            authContext = getOrCreateContext(authority);
+            authContext = getOrCreateContext(authority, validateAuthority);
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -233,10 +238,10 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
-    private boolean clearTokenCache(String authority) {
+    private boolean clearTokenCache(String authority, boolean validateAuthority) {
         final AuthenticationContext authContext;
         try{
-            authContext = getOrCreateContext(authority);
+            authContext = getOrCreateContext(authority, validateAuthority);
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
@@ -317,10 +322,6 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
         currentContext = result;
         return result;
-    }
-
-    private AuthenticationContext getOrCreateContext (String authority) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        return getOrCreateContext(authority, false);
     }
 
     private SecretKey createSecretKey(String key) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeySpecException {
