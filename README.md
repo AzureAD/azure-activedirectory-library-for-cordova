@@ -1,5 +1,8 @@
 # Active Directory Authentication Library (ADAL) plugin for Apache Cordova apps
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ysf7dm2u2aclh7da/branch/master?svg=true)](https://ci.appveyor.com/project/sgrebnov/azure-activedirectory-library-for-cordova/branch/master)
+[![Build Status](https://travis-ci.org/sgrebnov/azure-activedirectory-library-for-cordova.svg?branch=master)](https://travis-ci.org/sgrebnov/azure-activedirectory-library-for-cordova)
+
 Active Directory Authentication Library ([ADAL](https://msdn.microsoft.com/en-us/library/azure/jj573266.aspx)) plugin provides easy to use authentication functionality for your Apache Cordova apps by taking advantage of Windows Server Active Directory and Windows Azure Active Directory.
 Here you can find the source code for the library.
 
