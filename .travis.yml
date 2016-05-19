@@ -1,0 +1,13 @@
+
+# Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+
+language: objective-c
+sudo: false
+install:
+  - npm install -g cordova
+  - npm install -g cordova-paramedic
+
+script:
+  - node --version
+  - npm --version
+  - cordova-paramedic --platform ios --plugin . --justbuild
