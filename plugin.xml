@@ -92,7 +92,7 @@
         <!-- Needed to patch projitems so that the solution is correct right after plugin install -->
         <hook type="after_plugin_install" src="scripts/prePackage-windows.js" />
 
-        <hook type="pre_package" src="scripts/prePackage-windows.js" />
+        <hook type="after_prepare" src="scripts/prePackage-windows.js" />
         <hook type="before_plugin_uninstall" src="scripts/beforeUninstall-windows.js" />
     </platform>
 </plugin>
