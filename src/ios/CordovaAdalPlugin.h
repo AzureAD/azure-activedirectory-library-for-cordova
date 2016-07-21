@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-#import <ADALiOS/ADAuthenticationContext.h>
+#import <ADAL/ADAuthenticationContext.h>
 
 // Implements Apache Cordova plugin for Microsoft Azure ADAL
 @interface CordovaAdalPlugin : CDVPlugin

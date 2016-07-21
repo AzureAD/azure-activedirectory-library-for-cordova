@@ -58,7 +58,7 @@ UserInfo.fromJWT = function function_name (jwtToken) {
     // JWT 'exp' is in seconds, Date requires value in milliseconds
     result.passwordExpiresOn = token.exp ? new Date(token.exp * 1000) : null;
     result.uniqueId = token.unique_name;
-    result.userId = token.oid;
+    result.userId = token.oid || result.uniqueId;
 
     return result;
 };
