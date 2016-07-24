@@ -113,6 +113,9 @@ module.exports.defineAutoTests = function () {
                 done();
             }, function (err) {
                 expect(err).toBeDefined();
+                expect(err instanceof Error).toBeTruthy();
+                expect(err.message).toBeDefined();
+                expect(err.code).toBeDefined();
                 done();
             });
         });

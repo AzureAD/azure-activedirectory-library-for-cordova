@@ -52,10 +52,20 @@ class DefaultAuthenticationCallback implements AuthenticationCallback<Authentica
 
     /**
      * Error callback that passes error to Cordova
-     * @param e AuthenticationException
+     * @param authException AuthenticationException
      */
     @Override
-    public void onError(Exception e) {
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
+    public void onError(Exception authException) {
+        JSONObject cordovaError = new JSONObject();
+        try {
+            cordovaError.put("errorDescription",authException.getMessage());
+            if (authException instanceof AuthenticationException) {
+                cordovaError.put("errorCode", ((AuthenticationException)authException).mCode.toString());
+            }
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, cordovaError));
+        }
+        catch(JSONException ex){
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION, ex.getMessage()));
+        }
     }
 }
