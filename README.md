@@ -137,6 +137,21 @@ authContext.tokenCache.readItems().then(function (items) {
 });
 ```
 
+## Handling Errors
+
+In case of method execution failure corresponding promise is rejected with a standard `JavaScript Error` instance.
+The following error properties are available for you in this case:
+
+* err.message - Human-readable description of the error.
+* err.code - Error-code returned by native SDK; you can use this information to detect most common error reasons and provide extra
+logic based on this information. **Important:** code is platform specific, see below for more details:
+ * iOS: https://github.com/AzureAD/azure-activedirectory-library-for-objc/blob/dev/ADAL/src/public/ADErrorCodes.h
+ * Android: https://github.com/AzureAD/azure-activedirectory-library-for-android/blob/master/src/src/com/microsoft/aad/adal/ADALError.java
+ * Windows: https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/master/src/ADAL.PCL/Constants.cs
+* err.details - Raw error information returned by Apache Cordova bridge and native implementation (if available).
+  
+
+
 ## Known issues and workarounds
 
 ## How to sign out
