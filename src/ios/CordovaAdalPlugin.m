@@ -222,14 +222,22 @@
 
             for (ADTokenCacheItem*  item in cacheItems)
             {
-                //remove item
+                NSString *userUniqueId;
+                NSDictionary *itemAllClaims = [[item userInformation] allClaims];
+
+                if (itemAllClaims && itemAllClaims[@"unique_name"]) {
+                    userUniqueId = itemAllClaims[@"unique_name"];
+                } else {
+                    userUniqueId = [[item userInformation] userId];
+                }
 
                 if ([itemAuthority isEqualToString:[item authority]]
-                    && [userId isEqualToString:[[item userInformation] userId]]
+                    && [userId isEqualToString:userUniqueId]
                     && [clientId isEqualToString:[item clientId]]
                     // resource could be nil which is fine
                     && ((!resourceId && ![item resource]) || [resourceId isEqualToString:[item resource]])) {
 
+                    //remove item
                     [cacheStore removeItem:item error: &error];
 
                     if (error != nil)
