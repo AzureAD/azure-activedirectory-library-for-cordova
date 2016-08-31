@@ -574,6 +574,21 @@ function base64UrlToBase64(b64Url) {
     return b64Url.replace(/-/g, '+').replace(/_/g, '/');
 }
 
+ /**
+ * Decodes the Base64-encoded value into a string with correct utf8 encoding support.
+ * See for more details: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+ * 
+ * @param  {String} str Base64-encoded string to decode
+ * 
+ * @return {String}     Decoded string
+ *
+ */
+function b64DecodeUnicode(str) {
+    return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
 /**
  * Parses a valid JWT token into JSON representation.
  * This method doesn't validate/encode token.
@@ -595,7 +610,7 @@ function parseJWT (jwt) {
     jwtBody = base64UrlToBase64(jwtBody);
 
     try {
-        return JSON.parse(window.atob(jwtBody));
+        return JSON.parse(b64DecodeUnicode(jwtBody));
     } catch (e) {
         throw jwtParseError;
     }

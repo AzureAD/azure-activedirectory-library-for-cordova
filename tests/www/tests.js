@@ -61,6 +61,26 @@ module.exports.defineAutoTests = function () {
             }
         });
 
+        it("Should correctly parse jwt token", function () {
+            try {
+                var user = UserInfo.fromJWT("eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiI2NjllZWI2Ny05NTY4LTQ5M2UtODhkYy1hYzI4MWUyNDY5MTAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC81MTRiZGFhNC1iODhhLTQzODctOTViOS0zNzI0ZDg4ZjM2MmMvIiwiaWF0IjoxNDcyNjM2ODY3LCJuYmYiOjE0NzI2MzY4NjcsImV4cCI6MTQ3MjY0MDc2NywiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6Imxhc3ROYW1lLcOhxaFraGFsaWTDocWhIiwiZ2l2ZW5fbmFtZSI6Im5hbWUtw6HFoWtoYWxpZMOhxaEiLCJpcGFkZHIiOiIxMDkuNjAuMTM1LjEwOSIsIm5hbWUiOiJkaXNwbGF5TmFtZS3DocWha2hhbGlkw6HFoSIsIm9pZCI6IjExNzY1NWY4LTBmODItNGQ0ZC1hZTUwLWY3OWQ4MmYxMzJiMCIsInN1YiI6IkZPT2EzdDd1VFdSZVpDdzFfNUdEVVF3TnU2N3VFM2J3cVNIcnFUNzFlVFEiLCJ0aWQiOiI1MTRiZGFhNC1iODhhLTQzODctOTViOS0zNzI0ZDg4ZjM2MmMiLCJ1bmlxdWVfbmFtZSI6InVzZXJAY29yZG92YUFEQUwub25taWNyb3NvZnQuY29tIiwidXBuIjoidXNlckBjb3Jkb3ZhQURBTC5vbm1pY3Jvc29mdC5jb20iLCJ2ZXIiOiIxLjAifQ.");
+
+                expect(user).toBeDefined();
+                expect(user instanceof UserInfo).toBeTruthy();
+                // ensure utf8 characters are correctly handled
+                expect(user.displayableId).toEqual("displayName-áškhalidáš");
+                expect(user.familyName).toEqual("lastName-áškhalidáš");
+                expect(user.givenName).toEqual("name-áškhalidáš");
+                expect(user.uniqueId).toEqual("user@cordovaADAL.onmicrosoft.com");
+                expect(user.userId).toEqual("117655f8-0f82-4d4d-ae50-f79d82f132b0");
+                expect(user.identityProvider).toEqual("https://sts.windows.net/514bdaa4-b88a-4387-95b9-3724d88f362c/");
+                expect(user.passwordExpiresOn).toEqual(new Date(1472640767 * 1000));
+
+            } catch (err) {
+                expect(err).not.toBeDefined();
+            }
+        });
+
         // We need to test this case here because we need to be sure
         // that context for this authority hadn't been created already
         it("Should get token successfully if created using constructor", function (done) {
