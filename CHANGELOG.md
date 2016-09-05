@@ -1,3 +1,15 @@
+0.8.0 - September, 2016
+* ios: fix login on `iOS10`
+* ios: switched from native SDK `1.x` to `2.x` (`2.2.4`)
+* ios: token cache delete method should compare with unique name
+* android: prevent refreshing on screen rotation
+* windows: upgraded native SDK to `2.28.1`
+* windows: adding Windows native libs without hooks
+* windows: replaced deprecated `pre_package` hook with `after_prepare`
+* added support of native error codes: [`err.code`](https://github.com/AzureAD/azure-activedirectory-library-for-cordova#handling-errors)
+* fixed #84 User display id looks bad with utf8 characters
+* added engine tags to specify min cordova platforms versions supported
+
 0.7.1 - May 5, 2016
 * android: bump ADAL SDK version to 1.18
 * android: Fixing build error caused by improper type casting #62
