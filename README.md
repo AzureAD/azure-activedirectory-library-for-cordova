@@ -233,8 +233,7 @@ To run the tests you need to create a new application as described in [Installat
   * Build and run application.
 
 ## Windows Quirks ##
-[There is currently a Cordova issue](https://issues.apache.org/jira/browse/CB-8615), which entails the need of the hook-based workaround.
-The workaround is to be discarded after a fix is applied.
+Plugin is based on native ADAL v2 as ADAL v3 [does not support Winmd anymore](https://stackoverflow.com/questions/37467211/adal-3-windown-8-1-app-nuget-update-failing#comment62469160_37468708).
 
 ### Using ADFS/SSO
 To use ADFS/SSO on Windows platform (Windows Phone 8.1 is not supported for now) add the following preference into `config.xml`:

@@ -414,6 +414,11 @@
             Authentication failed.
             </summary>
         </member>
+        <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.NonHttpsRedirectNotSupported">
+            <summary>
+            non https redirect failed.
+            </summary>
+        </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.AuthenticationCanceled">
             <summary>
             Authentication canceled.
@@ -861,6 +866,12 @@
              Initializes a new instance of the exception class.
             </summary>
         </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the exception class.
+            </summary>
+            <param name="exception">inner exception</param>
+        </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException.#ctor(System.String,System.String)">
             <summary>
              Initializes a new instance of the exception class.
@@ -1094,14 +1105,14 @@
         </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.UserAssertion.#ctor(System.String,System.String)">
             <summary>
-            Constructor to create credential with client id, assertion and assertionType
+            Constructor to create credential with assertion and assertionType
             </summary>
             <param name="assertion">Assertion representing the user.</param>
             <param name="assertionType">Type of the assertion representing the user.</param>
         </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.UserAssertion.#ctor(System.String,System.String,System.String)">
             <summary>
-            Constructor to create credential with client id, assertion, assertionType and userId
+            Constructor to create credential with assertion, assertionType and userId
             </summary>
             <param name="assertion">Assertion representing the user.</param>
             <param name="assertionType">Type of the assertion representing the user.</param>
@@ -1135,7 +1146,8 @@
         </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.UserCredential.#ctor(System.String)">
             <summary>
-            Constructor to create credential with client id and secret
+            Constructor to create user  credential. Using this constructor would imply integrated authentication with logged in user
+            and it can only be used in domain joined scenarios.
             </summary>
             <param name="userName">Identifier of the user application requests token on behalf.</param>
         </member>
