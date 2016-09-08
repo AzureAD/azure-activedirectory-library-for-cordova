@@ -9,6 +9,7 @@
 * added support of native error codes: [`err.code`](https://github.com/AzureAD/azure-activedirectory-library-for-cordova#handling-errors)
 * fixed #84 User display id looks bad with utf8 characters
 * added engine tags to specify min cordova platforms versions supported
+* correctly report userId for not synced users
 
 0.7.1 - May 5, 2016
 * android: bump ADAL SDK version to 1.18

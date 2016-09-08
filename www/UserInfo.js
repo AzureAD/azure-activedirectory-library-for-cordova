@@ -58,7 +58,9 @@ UserInfo.fromJWT = function function_name (jwtToken) {
     // JWT 'exp' is in seconds, Date requires value in milliseconds
     result.passwordExpiresOn = token.exp ? new Date(token.exp * 1000) : null;
     result.uniqueId = token.unique_name;
-    result.userId = token.oid;
+    // Users not synced will have no `oid` so we fallback to `sub` similar to what native libs do, for example:
+    // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/c5c66c097a6499e0c646f5ed1db1d6d278683104/src/ADAL.PCL/TokenResponse.cs#L205
+    result.userId = token.oid || token.sub;
 
     return result;
 };

@@ -95,7 +95,7 @@ static id ObjectOrNull(id object)
         {
             for (ADTokenCacheItem *obj in cacheItems)
             {
-                if ([userId isEqualToString:obj.userInformation.userObjectId])
+                if ([userId caseInsensitiveCompare:obj.userInformation.userObjectId] == NSOrderedSame || [userId caseInsensitiveCompare:obj.userInformation.uniqueId] == NSOrderedSame)
                 {
                     return obj.userInformation.userId;
                 }
