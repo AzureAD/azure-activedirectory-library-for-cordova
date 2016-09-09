@@ -87,6 +87,30 @@
         <resource-file src="src/ios/ADALiOS.entitlements" />
         <hook type="after_plugin_install" src="scripts/configureEntitlementsIos.js" />
         <hook type="before_plugin_uninstall" src="scripts/configureEntitlementsIos.js" />
+        <!-- 
+        Plist sections below are required for brokered authentication support
+        https://github.com/AzureAD/azure-activedirectory-library-for-objc#brokered-authentication
+        -->
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+            <array>
+                <string>msauth</string>
+            </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLName</key>
+                    <string>$(CFBundleIdentifier)</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>x-msauth-$(CFBundleIdentifier:rfc1034identifier)</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
     </platform>
 
     <platform name="windows">

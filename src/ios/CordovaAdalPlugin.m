@@ -50,6 +50,10 @@
 
             ADAuthenticationContext *authContext = [CordovaAdalPlugin getOrCreateAuthContext:authority
                                                                            validateAuthority:validateAuthority];
+            // `x-msauth-` redirect url prefix means we should use brokered authentication
+            // https://github.com/AzureAD/azure-activedirectory-library-for-objc#brokered-authentication
+            authContext.credentialsType = (redirectUri.scheme && [redirectUri.scheme hasPrefix: @"x-msauth-"]) ?
+                AD_CREDENTIALS_AUTO : AD_CREDENTIALS_EMBEDDED;
 
             // TODO iOS sdk requires user name instead of guid so we should map provided id to a known user name
             userId = [CordovaAdalUtils mapUserIdToUserName:authContext

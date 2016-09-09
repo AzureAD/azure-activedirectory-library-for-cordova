@@ -253,6 +253,16 @@ The following method should be used to enable broker component support (delivere
 
 __Note__: Developer needs to register special redirectUri for broker usage. RedirectUri is in the format of `msauth://packagename/Base64UrlencodedSignature`
 
+## iOS Quirks ##
+### Broker support
+Plugin automatically detects whether to enable brokered authentication based on redirectUri format (if starts with `x-msauth-`).
+Developer needs to register special redirectUri for broker usage following format below:
+```
+x-msauth-<your-bundle-id>://<your.bundle.id>
+ex: x-msauth-com-microsoft-mytestiosapp://com.microsoft.mytestiosapp
+```
+Read [ADAL for iOS](https://github.com/AzureAD/azure-activedirectory-library-for-objc#brokered-authentication) to understand broker concept in more details.
+
 ## Copyrights ##
 Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
 
