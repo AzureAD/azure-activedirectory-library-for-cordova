@@ -23,6 +23,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "ADAL.h"
+
 @class ADAuthenticationError;
 @class ADAuthenticationResult;
 @class ADTokenCacheItem;
