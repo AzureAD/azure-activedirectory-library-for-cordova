@@ -1,6 +1,6 @@
 0.8.0 - September, 2016
 * ios: fix login on `iOS10`
-* ios: switched from native SDK `1.x` to `2.x` (`2.2.4`)
+* ios: switched from native SDK `1.x` to `2.x` (`2.2.5`)
 * ios: token cache delete method should compare with unique name
 * android: prevent refreshing on screen rotation
 * windows: upgraded native SDK to `2.28.1`
