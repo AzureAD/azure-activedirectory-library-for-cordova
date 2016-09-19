@@ -10,6 +10,18 @@
       "windows"
     ]
   },
+  "engines": {
+    "cordovaDependencies": {
+      "0.8.0": {
+        "cordova-android": ">=4.1.0",
+        "cordova-windows": ">=4.1.0",
+        "cordova": ">=5.4.0"
+      },
+      "1.0.0": {
+        "cordova": ">=100"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AzureAD/azure-activedirectory-library-for-cordova.git"
