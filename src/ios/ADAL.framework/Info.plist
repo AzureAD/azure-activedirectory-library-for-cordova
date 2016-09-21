@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>15G31</string>
+	<string>15G1004</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2.5</string>
+	<string>2.2.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -33,15 +33,15 @@
 	<key>DTPlatformName</key>
 	<string>iphonesimulator</string>
 	<key>DTPlatformVersion</key>
-	<string>9.3</string>
+	<string>10.0</string>
 	<key>DTSDKBuild</key>
-	<string>13E230</string>
+	<string>14A345</string>
 	<key>DTSDKName</key>
-	<string>iphonesimulator9.3</string>
+	<string>iphonesimulator10.0</string>
 	<key>DTXcode</key>
-	<string>0731</string>
+	<string>0800</string>
 	<key>DTXcodeBuild</key>
-	<string>7D1014</string>
+	<string>8A218a</string>
 	<key>MinimumOSVersion</key>
 	<string>8.0</string>
 	<key>UIDeviceFamily</key>
