@@ -84,6 +84,10 @@ module.exports.defineAutoTests = function () {
         // We need to test this case here because we need to be sure
         // that context for this authority hadn't been created already
         it("Should get token successfully if created using constructor", function (done) {
+            // skip tests that require user interaction if running on CI
+            if (window.IS_CI) {
+                pending();
+            }
             var context = new AuthenticationContext(AUTHORITY_URL);
             context.acquireTokenSilentAsync(RESOURCE_URL, APP_ID, TEST_USER_ID)
             .then(function (authResult) {
@@ -164,6 +168,10 @@ module.exports.defineAutoTests = function () {
 
             // This test is pended since acquireTokenAsync will always bypass cookies and show UI
             xit("Should acquire token via 'acquireTokenAsync' method", function (done) {
+                // skip tests that require user interaction if running on CI
+                if (window.IS_CI) {
+                    pending();
+                }
                 authContext.acquireTokenAsync(RESOURCE_URL, APP_ID, REDIRECT_URL)
                 .then(function (authResult) {
                     expect(authResult).toBeDefined();
@@ -189,6 +197,10 @@ module.exports.defineAutoTests = function () {
             });
 
             it("Should acquire token via 'acquireTokenSilentAsync' method", function (done) {
+                // skip tests that require user interaction if running on CI
+                if (window.IS_CI) {
+                    pending();
+                }
                 authContext.acquireTokenSilentAsync(RESOURCE_URL, APP_ID, TEST_USER_ID)
                 .then(function (authResult) {
                     expect(authResult).toBeDefined();
@@ -206,6 +218,10 @@ module.exports.defineAutoTests = function () {
             });
 
             it("Should fail to acquire token via 'acquireTokenSilentAsync' method if username is not valid", function (done) {
+                // skip tests that require user interaction if running on CI
+                if (window.IS_CI) {
+                    pending();
+                }
                 authContext.acquireTokenSilentAsync(RESOURCE_URL, APP_ID, INVALID_USER_ID)
                 .then(function (authResult) {
                     expect(authResult).not.toBeDefined();
@@ -244,6 +260,10 @@ module.exports.defineAutoTests = function () {
         });
 
         it("Should acquire native cache via 'readItems' method", function (done) {
+            // skip tests that require user interaction if running on CI
+            if (window.IS_CI) {
+                pending();
+            }
             cache.readItems()
             .then(function (cacheItems) {
                 expect(cacheItems.constructor).toBe(Array);
@@ -257,6 +277,10 @@ module.exports.defineAutoTests = function () {
         });
 
         it("Should be able to delete item via 'deleteItem' method", function(done) {
+            // skip tests that require user interaction if running on CI
+            if (window.IS_CI) {
+                pending();
+            }
 
             var fail = function (err) {
                 expect(err).not.toBeDefined();
