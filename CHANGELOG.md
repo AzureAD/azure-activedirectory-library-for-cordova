@@ -1,3 +1,7 @@
+0.8.1 - September 22, 2016
+* added `cordovaDependencies` section to package.json
+* ios: bump and rebuild ADAL SDK to 2.2.6
+
 0.8.0 - September, 2016
 * ios: fix login on `iOS10`
 * ios: switched from native SDK `1.x` to `2.x` (`2.2.5`)

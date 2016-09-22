@@ -3,7 +3,7 @@
  Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved.
  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 -->
-<plugin id="cordova-plugin-ms-adal" version="0.8.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-ms-adal" version="0.8.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>ADAL for Cordova</name>
     <description>Provides Microsoft Azure Active Directory (ADAL) OAuth client.</description>
 
@@ -87,7 +87,7 @@
         <resource-file src="src/ios/ADALiOS.entitlements" />
         <hook type="after_plugin_install" src="scripts/configureEntitlementsIos.js" />
         <hook type="before_plugin_uninstall" src="scripts/configureEntitlementsIos.js" />
-        <!-- 
+        <!--
         Plist sections below are required for brokered authentication support
         https://github.com/AzureAD/azure-activedirectory-library-for-objc#brokered-authentication
         -->
