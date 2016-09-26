@@ -10,9 +10,25 @@ Here you can find the source code for the library.
   * [ADAL for iOS](https://github.com/AzureAD/azure-activedirectory-library-for-objc),
   * [ADAL for .NET](https://github.com/AzureAD/azure-activedirectory-library-for-dotnet).
 
+## NOTICE: iOS 10 and Azure Authentication
+
+**If you're using plugin version < 0.8.x on iOS platform, we strongly recommend you to update your application to use newest version of the plugin in order to support authentication on iOS 10, otherwise your users will not be able to sign-in once iOS 10 is released.**
+
+Once you’ve updated plugin to the latest version your application will continue to work, there is no further code changes required for your application to continue working.
+
+### To update your application using Cordova CLI
+
+- navigate to your app's directory
+- run the following commands:
+
+  ```
+cordova plugin rm cordova-plugin-ms-adal --save
+cordova plugin add cordova-plugin-ms-adal@0.8.x --save
+  ```
+
 ## Community Help and Support
 
-We leverage [Stack Overflow](http://stackoverflow.com/) to work with the community on supporting Azure Active Directory and its SDKs, including this one! We highly recommend you ask your questions on Stack Overflow (we're all on there!) Also browser existing issues to see if someone has had your question before. 
+We leverage [Stack Overflow](http://stackoverflow.com/) to work with the community on supporting Azure Active Directory and its SDKs, including this one! We highly recommend you ask your questions on Stack Overflow (we're all on there!) Also browser existing issues to see if someone has had your question before.
 
 We recommend you use the "adal" tag so we can see it! Here is the latest Q&A on Stack Overflow for ADAL: [http://stackoverflow.com/questions/tagged/adal](http://stackoverflow.com/questions/tagged/adal)
 
@@ -24,11 +40,13 @@ If you find a security issue with our libraries or services please report it to 
 
 This plugin uses native SDKs for ADAL for each supported platform and provides single API across all platforms. Here is a quick usage sample:
 
-```javascriptMicrosoft.ADAL.AuthenticationSettings.setUseBroker(false)
+```javascript
+
+Microsoft.ADAL.AuthenticationSettings.setUseBroker(false)
 
 // Shows user authentication dialog if required
 function authenticate(authCompletedCallback, errorCallback) {
-  var authContext = new Microsoft.ADAL.AuthenticationContext(authority);  
+  var authContext = new Microsoft.ADAL.AuthenticationContext(authority);
   authContext.tokenCache.readItems().then(function (items) {
     if (items.length > 0) {
         authority = items[0].authority;
@@ -70,7 +88,7 @@ Use `AuthenticationContext` constructor to synchronously create a new `Authentic
 - __validateAuthority__: Validate authority before sending token request. _(Boolean)_ (Default: `true`) [Optional]
 
 #### Example
-    var authContext = new Microsoft.ADAL.AuthenticationContext("https://login.windows.net/common"); 
+    var authContext = new Microsoft.ADAL.AuthenticationContext("https://login.windows.net/common");
 
 ## AuthenticationContext methods and properties
 - acquireTokenAsync
@@ -149,7 +167,7 @@ logic based on this information. **Important:** code is platform specific, see b
  * Android: https://github.com/AzureAD/azure-activedirectory-library-for-android/blob/master/src/src/com/microsoft/aad/adal/ADALError.java
  * Windows: https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/master/src/ADAL.PCL/Constants.cs
 * err.details - Raw error information returned by Apache Cordova bridge and native implementation (if available).
-  
+
 
 
 ## Known issues and workarounds
