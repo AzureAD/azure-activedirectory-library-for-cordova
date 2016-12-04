@@ -60,7 +60,7 @@ class DefaultAuthenticationCallback implements AuthenticationCallback<Authentica
         try {
             cordovaError.put("errorDescription",authException.getMessage());
             if (authException instanceof AuthenticationException) {
-                cordovaError.put("errorCode", ((AuthenticationException)authException).mCode.toString());
+                cordovaError.put("errorCode", ((AuthenticationException)authException).getCode().toString());
             }
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, cordovaError));
         }
