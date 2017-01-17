@@ -11,8 +11,7 @@ var webAuthBrokerContinuationCallback = null;
 var successWebAuthStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus.success;
 var activationKindWebAuthContinuation = Windows.ApplicationModel.Activation.ActivationKind.webAuthenticationBrokerContinuation;
 var AUTH_RESULT_SUCCESS_STATUS = 0;
-var REQUIRED_DISPLAYABLE_ID = Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.requiredDisplayableId,
-    UNIQUE_ID = Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.uniqueId;
+var OPTIONAL_DISPLAYABLE_ID = Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.optionalDisplayableId;
 
 var ctxCache = {};
 
@@ -24,7 +23,7 @@ function handleAuthResult(win, fail, res) {
     }
 }
 
-function mapUserUniqueIdToDisplayName(context, uniqueId) {
+function tryMapUniqueIdToDisplayName(context, uniqueId) {
     var cacheItems = context.tokenCache.readItems();
 
     for (var i = 0; i < cacheItems.length; i++) {
@@ -34,6 +33,36 @@ function mapUserUniqueIdToDisplayName(context, uniqueId) {
             }
         } catch (e) { }
     }
+
+    return null;
+}
+
+function tryMapDisplayNameToUniqueId(context, displayName) {
+    var cacheItems = context.tokenCache.readItems();
+
+    for (var i = 0; i < cacheItems.length; i++) {
+        try {
+            if (cacheItems[i].displayableId === displayName) {
+                return cacheItems[i].uniqueId;
+            }
+        } catch (e) { }
+    }
+
+    return null;
+}
+
+function getUserIdentifier(context, userId) {
+    var uniqueId = tryMapDisplayNameToUniqueId(context, userId);
+    if (uniqueId !== null) {
+        return wrapUserId(userId, OPTIONAL_DISPLAYABLE_ID);
+    } 
+
+    var displayName = tryMapUniqueIdToDisplayName(context, userId);
+    if (displayName !== null) {
+       return wrapUserId(displayName, OPTIONAL_DISPLAYABLE_ID);
+    }
+
+    return wrapUserId(userId, OPTIONAL_DISPLAYABLE_ID);
 }
 
 function wrapUserId(userId, type) {
@@ -98,18 +127,10 @@ var ADALProxy = {
             var redirectUrl = new Windows.Foundation.Uri(args[4]);
             var userId = args[5];
             var extraQueryParameters = args[6];
-
             var userIdentifier;
-            var displayName;
 
             ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
-                displayName = mapUserUniqueIdToDisplayName(context, userId);
-
-                if (typeof displayName !== 'undefined') {
-                    userIdentifier = wrapUserId(displayName, REQUIRED_DISPLAYABLE_ID);
-                } else {
-                    userIdentifier = wrapUserId(userId, UNIQUE_ID);
-                }
+                userIdentifier = getUserIdentifier(context, userId);
 
                 if (isPhone) {
                     // Continuation callback is used when we're running on WindowsPhone which uses
@@ -178,9 +199,8 @@ var ADALProxy = {
             var clientId = args[3];
             var userId = args[4];
 
-            var userIdentifier = wrapUserId(userId, UNIQUE_ID);
-
             ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
+                var userIdentifier = getUserIdentifier(context, userId);
                 context.acquireTokenSilentAsync(resourceUrl, clientId, userIdentifier).then(function (res) {
                     handleAuthResult(win, fail, res);
                 }, fail);

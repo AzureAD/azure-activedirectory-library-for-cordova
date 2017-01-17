@@ -386,6 +386,39 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         });
     });
 
+    createActionButton("Acquire token with userId (specified as DisplayableId aka email)", function () {
+
+        if (!context) {
+            contentEl.innerHTML = "Create context first";
+            return;
+        }
+
+        context.tokenCache.readItems()
+        .then(function function_name(items) {
+            var itemsWithDisplayableId = items.filter(function (item) {
+                return item && item.displayableId;
+            });
+
+            if (itemsWithDisplayableId.length <= 0) {
+                contentEl.innerHTML = "No users withDisplayableId found in cache, please acquire token first";
+                return;
+            }
+
+            context.acquireTokenAsync(RESOURCE_URL, APP_ID, REDIRECT_URL, itemsWithDisplayableId[0].displayableId).then(function (authRes) {
+                TEST_USER_ID = itemsWithDisplayableId[0].displayableId;
+                contentEl.innerHTML = authRes;
+                contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
+                contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
+            }, function (err) {
+                contentEl.innerHTML = err ? err.message : "";
+            });
+
+            contentEl.innerHTML = JSON.stringify(items, null, 4);
+        }, function (err) {
+            contentEl.innerHTML = err ? err.message : "";
+        });
+    });
+
     createActionButton("Acquire token silently", function () {
 
         if (!context) {
@@ -399,6 +432,62 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
             contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
         }, function(err) {
             contentEl.innerHTML = err ? err.message : "";
+        });
+    });
+
+    createActionButton("Acquire token silently with userId", function () {
+
+        if (!context) {
+            contentEl.innerHTML = "Create context first";
+            return;
+        }
+
+        context.tokenCache.readItems()
+        .then(function function_name(items) {
+            var itemsWithUserId = items.filter(function (item) {
+                return item.userInfo && item.userInfo.userId;
+            });
+
+            if (itemsWithUserId.length <= 0) {
+                contentEl.innerHTML = "No users withUserId found in cache, please acquire token first";
+                return;
+            }
+
+            context.acquireTokenSilentAsync(RESOURCE_URL, APP_ID, itemsWithUserId[0].userInfo.userId).then(function (authRes) {
+                contentEl.innerHTML = authRes;
+                contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
+                contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
+            }, function (err) {
+                contentEl.innerHTML = err ? err.message : "";
+            });
+        });
+    });
+
+    createActionButton("Acquire token silently with userId (specified as DisplayableId aka email)", function () {
+
+        if (!context) {
+            contentEl.innerHTML = "Create context first";
+            return;
+        }
+
+        context.tokenCache.readItems()
+        .then(function function_name(items) {
+            var itemsWithDisplayableId = items.filter(function (item) {
+                return item && item.displayableId;
+            });
+
+            if (itemsWithDisplayableId.length <= 0) {
+                contentEl.innerHTML = "No users withDisplayableId found in cache, please acquire token first";
+                return;
+            }
+
+            context.acquireTokenSilentAsync(RESOURCE_URL, APP_ID, itemsWithDisplayableId[0].displayableId).then(function (authRes) {
+                contentEl.innerHTML = authRes;
+                contentEl.innerHTML += "<br /> AccessToken: " + authRes.accessToken;
+                contentEl.innerHTML += "<br /> ExpiresOn: " + authRes.expiresOn;
+            }, function (err) {
+                contentEl.innerHTML = err ? err.message : "";
+            });
         });
     });
 
