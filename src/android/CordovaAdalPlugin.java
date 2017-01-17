@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -184,6 +185,23 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         final AuthenticationContext authContext;
         try{
             authContext = getOrCreateContext(authority, validateAuthority);
+
+            //  We should retrieve userId from broker cache since local is always empty
+            boolean useBroker = AuthenticationSettings.INSTANCE.getUseBroker();
+            if (useBroker) {
+                if (TextUtils.isEmpty(userId)) {
+                    // Get first user from account list
+                    userId = authContext.getBrokerUser();
+                }
+
+                for (UserInfo info: authContext.getBrokerUsers()) {
+                    if (info.getDisplayableId().equals(userId)) {
+                        userId = info.getUserId();
+                        break;
+                    }
+                }
+            }
+
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
             return true;
