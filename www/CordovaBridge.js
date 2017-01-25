@@ -5,8 +5,9 @@
 var exec = require('cordova/exec');
 var Deferred = require('./utility').Utility.Deferred;
 
-var GENERIC_ERR_MESSAGE = "Error occured while executing native method.";
+var GENERIC_ERR_MESSAGE = "Error occurred while executing native method.";
 var GENERIC_ERR_CODE    = "NATIVE_METHOD_GENERAL_FAILURE";
+
 /**
  * Implements proxy between Cordova JavaScript and Native functionality
  */

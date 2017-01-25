@@ -22,7 +22,7 @@ function UserInfo(userInfo) {
 }
 
 /**
- * Parses jwt token that contains a use information and produces a valid UserInfo structure.
+ * Parses jwt token that contains user information and produces a valid UserInfo structure.
  * This method is intended for internal use and should not be used by end-user.
  *
  * @param  {String} jwtToken String that contains a valid JWT token, that contains user information.

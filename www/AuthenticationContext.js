@@ -11,7 +11,7 @@ var TokenCache = require('./TokenCache');
 
 /**
  * Constructs context to use with known authority to get the token. It reuses existing context
- * for this authority URL in native proxy or creates a new one if it doesn't exists.
+ * for this authority URL in native proxy or creates a new one if it doesn't exist.
  * Corresponding native context will be created at first time when it will be needed.
  *
  * @param   {String}  authority         Authority url to send code and token requests
@@ -37,7 +37,7 @@ function AuthenticationContext(authority, validateAuthority) {
 
 /**
  * Constructs context asynchronously to use with known authority to get the token.
- * It reuses existing context for this authority URL in native proxy or creates a new one if it doesn't exists.
+ * It reuses existing context for this authority URL in native proxy or creates a new one if it doesn't exist.
  *
  * @param   {String}   authority         Authority url to send code and token requests
  * @param   {Boolean}  validateAuthority Validate authority before sending token request. True by default
