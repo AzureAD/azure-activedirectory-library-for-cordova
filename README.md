@@ -55,7 +55,7 @@ function authenticate(authCompletedCallback, errorCallback) {
     // Attempt to authorize user silently
     authContext.acquireTokenSilentAsync(resourceUri, clientId)
     .then(authCompletedCallback, function () {
-        // We require user cridentials so triggers authentication dialog
+        // We require user credentials so triggers authentication dialog
         authContext.acquireTokenAsync(resourceUri, clientId, redirectUri)
         .then(authCompletedCallback, errorCallback);
     });
