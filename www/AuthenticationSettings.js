@@ -22,5 +22,21 @@ module.exports = {
         checkArgs('*', 'AuthenticationSettings.setUseBroker', arguments);
 
         return bridge.executeNativeMethod('setUseBroker', [!!useBroker]);
+    },
+
+
+    /**
+     * Sets flag to use or skip authentication broker.
+     * By default, the secret key is generated inside the library
+     *
+     * @param   {String}   key         Key to use to generate encryption bytes
+     *
+     * @returns {Promise}  Promise either fulfilled or rejected with error
+     */
+    setSecretKey: function(secretKey) {
+
+        checkArgs('*', 'AuthenticationSettings.setSecretKey', arguments);
+
+        return bridge.executeNativeMethod('setSecretKey', [secretKey]);
     }
 }

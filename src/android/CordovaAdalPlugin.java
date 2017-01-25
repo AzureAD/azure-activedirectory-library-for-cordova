@@ -133,6 +133,9 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
             boolean useBroker = args.getBoolean(0);
             return setUseBroker(useBroker);
+        } else if (action.equals("setSecretKey")) {
+            String key = args.getString(0);
+            return setSecretKey(key);
         }
 
         return false;
@@ -292,6 +295,19 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
         callbackContext.success();
         return true;
+    }
+
+    private boolean setSecretKey(String key) {
+            try {
+                SecretKey secretKey = this.createSecretKey(key);
+                AuthenticationSettings.INSTANCE.setSecretKey(secretKey.getEncoded());
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+            } catch (Exception e) {
+                Log.w("CordovaAdalPlugin", "Unable to create secret: " + e.getMessage());
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
+            }
+
+            return true;
     }
 
     private void requestBrokerPermissions() {
