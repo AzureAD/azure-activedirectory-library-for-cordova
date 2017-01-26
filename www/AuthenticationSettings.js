@@ -21,6 +21,13 @@ module.exports = {
 
         checkArgs('*', 'AuthenticationSettings.setUseBroker', arguments);
 
-        return bridge.executeNativeMethod('setUseBroker', [!!useBroker]);
+        if (cordova.platformId === 'android') {
+            return bridge.executeNativeMethod('setUseBroker', [!!useBroker]);
+        }
+
+        // Broker is handled by system on Windows/iOS
+        var deferred = new Deferred();
+        deferred.resolve();
+        return deferred;
     }
 }

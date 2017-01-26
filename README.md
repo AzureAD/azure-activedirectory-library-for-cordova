@@ -42,8 +42,6 @@ This plugin uses native SDKs for ADAL for each supported platform and provides s
 
 ```javascript
 
-Microsoft.ADAL.AuthenticationSettings.setUseBroker(false)
-
 // Shows user authentication dialog if required
 function authenticate(authCompletedCallback, errorCallback) {
   var authContext = new Microsoft.ADAL.AuthenticationContext(authority);
@@ -267,7 +265,11 @@ __Note__: You should not normally use `adal-use-corporate-network` as it adds ca
 ### Broker support
 The following method should be used to enable broker component support (delivered with Intune's Company portal app). Read [ADAL for Android](https://github.com/AzureAD/azure-activedirectory-library-for-android) to understand broker concept in more details.
 
-`Microsoft.ADAL.AuthenticationSettings.setUseBroker(true);`
+```javascript
+Microsoft.ADAL.AuthenticationSettings.setUseBroker(true)
+.then(function() {
+  ...
+```
 
 __Note__: Developer needs to register special redirectUri for broker usage. RedirectUri is in the format of `msauth://packagename/Base64UrlencodedSignature`
 
