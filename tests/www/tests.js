@@ -317,6 +317,15 @@ module.exports.defineAutoTests = function () {
                 done();
             }, fail);
         });
+
+        it("AuthenticationSettings.setUseBroker should not crash", function(done) {
+            Microsoft.ADAL.AuthenticationSettings.setUseBroker(false).then(function() {
+                done();
+            }, function(err) {
+                expect(err).not.toBeDefined();
+                done();
+            });
+        })
     });
 };
 
