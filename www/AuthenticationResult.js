@@ -17,7 +17,16 @@ function AuthenticationResult(authResult) {
     this.statusCode = authResult.statusCode;
     this.tenantId = authResult.tenantId;
 
-    this.userInfo = authResult.idToken ? UserInfo.fromJWT(authResult.idToken) : null;
+    var jwtToken = authResult.idToken || authResult.accessToken;
+    this.userInfo = null;
+
+    if (jwtToken) {
+        this.userInfo = UserInfo.fromJWT(jwtToken);
+    }
+
+    if (!this.userInfo) {
+        this.userInfo = new UserInfo(authResult.userInfo);
+    }
 }
 
 /**
