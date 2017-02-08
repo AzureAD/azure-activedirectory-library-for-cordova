@@ -1,3 +1,11 @@
+0.9.0 - February 8, 2017
+* Use alternative sources to populate 'userInfo' in case if 'idToken' is not defined
+* Make AuthenticationSettings.setUseBroker available across platforms
+* Bump Android version to 1.10.0
+* windows: Fix login issues on Windows when user id is specified
+* android: Fix silent token acquisition using broker component
+* ios: Put ADAL CODE_SIGN_ENTITLEMENTS according to ios@4.3.0 Api
+
 0.8.1 - September 22, 2016
 * added `cordovaDependencies` section to package.json
 * ios: bump and rebuild ADAL SDK to 2.2.6
