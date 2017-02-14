@@ -1,0 +1,10 @@
+dependencies {
+    compile('com.microsoft.aad:adal:1.10.0') {}
+}
+
+android {
+    packagingOptions {
+        exclude "META-INF/MSFTSIG.SF"
+        exclude "META-INF/MSFTSIG.RSA"
+    }
+}
