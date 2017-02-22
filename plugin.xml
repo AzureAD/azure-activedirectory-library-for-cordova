@@ -126,12 +126,16 @@
     </platform>
 
     <platform name="windows">
+        <js-module src="src/windows/ADAL3Compat.js" name="ADAL3Compat">
+            <merges target="Microsoft.IdentityModel" />
+        </js-module>
+
         <js-module src="src/windows/ADALProxy.js" name="ADALProxy">
             <runs />
         </js-module>
 
-        <framework src="src/windows/lib/wpa/Microsoft.IdentityModel.Clients.ActiveDirectory.winmd" target="phone" custom="true" target-dir="adal-wpa"/>
-        <framework src="src/windows/lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.winmd" target="windows" custom="true" target-dir="adal-netcore45"/>
+        <framework src="src/windows/lib/wpa/Microsoft.IdentityModel.Clients.ActiveDirectory.winmd" target="phone" custom="true" target-dir="adal-wpa" versions="&lt;10" />
+        <framework src="src/windows/lib/adal3/ADAL3WinMDProxy.csproj" target="win" custom="true" type="projectReference" />
 
         <!-- Needed to patch projitems so that the solution is correct right after plugin install -->
         <hook type="after_plugin_install" src="scripts/prePackage-windows.js" />

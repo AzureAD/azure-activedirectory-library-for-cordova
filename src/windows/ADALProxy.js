@@ -4,6 +4,7 @@
 /*global require, Microsoft, Windows, WinJS*/
 
 var Deferred = require('./utility').Utility.Deferred;
+var UserInfo = require('./UserInfo');
 
 var isPhone = WinJS.Utilities.isPhone;
 
@@ -24,7 +25,7 @@ function handleAuthResult(win, fail, res) {
 }
 
 function tryMapUniqueIdToDisplayName(context, uniqueId) {
-    var cacheItems = context.tokenCache.readItems();
+    var cacheItems = toJsArray(context.tokenCache.readItems() || []);
 
     for (var i = 0; i < cacheItems.length; i++) {
         try {
@@ -38,7 +39,7 @@ function tryMapUniqueIdToDisplayName(context, uniqueId) {
 }
 
 function tryMapDisplayNameToUniqueId(context, displayName) {
-    var cacheItems = context.tokenCache.readItems();
+    var cacheItems = toJsArray(context.tokenCache.readItems() || []);
 
     for (var i = 0; i < cacheItems.length; i++) {
         try {
@@ -68,6 +69,10 @@ function getUserIdentifier(context, userId) {
 function wrapUserId(userId, type) {
     return (userId !== '' && userId != null) ? new Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier(userId, type)
         : Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier.anyUser;
+}
+
+function toJsArray(arrayLike) {
+    return Array.prototype.slice.call(arrayLike);
 }
 
 var ADALProxy = {
@@ -231,7 +236,7 @@ var ADALProxy = {
             var validateAuthority = args[1];
 
             ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
-                win(context.tokenCache.readItems().map(function(item) {
+                win(toJsArray(context.tokenCache.readItems() || []).map(function (item) {
                     var copy = {};
 
                     try {
@@ -269,6 +274,7 @@ var ADALProxy = {
 
                     try {
                         copy.idToken = item.idToken;
+                        copy.userInfo = UserInfo.fromJWT(copy.idToken || copy.accessToken);
                     } catch (e) { }
 
                     return copy;
@@ -290,7 +296,7 @@ var ADALProxy = {
             var itemIsMultipleResourceRefreshToken = args[6];
 
             ADALProxy.getOrCreateCtx(contextAuthority, validateAuthority).then(function (context) {
-                var allItems = context.tokenCache.readItems();
+                var allItems = toJsArray(context.tokenCache.readItems() || []);
 
                 for (var i = 0; i < allItems.length; i++) {
                     if (allItems[i].clientId === itemClientId
