@@ -14,9 +14,9 @@
     {
         return [NSNull null];
     }
-    
+
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-    
+
     [dict setObject:ObjectOrNull(obj.userId) forKey:@"userId"];
     if ([obj userIdDisplayable])
     {
@@ -33,9 +33,9 @@
 + (NSMutableDictionary *)ADAuthenticationResultToDictionary:(ADAuthenticationResult *)obj
 {
     NSMutableDictionary *dict = (obj.status == AD_SUCCEEDED) ? [CordovaAdalUtils ADTokenCacheStoreItemToDictionary:obj.tokenCacheItem] : [CordovaAdalUtils ADAuthenticationErrorToDictionary:obj.error];
-    
+
     [dict setObject:[NSNumber numberWithInt:obj.status] forKey:@"statusCode"];
-    
+
     return dict;
 }
 
@@ -52,26 +52,26 @@
 + (NSMutableDictionary *)ADTokenCacheStoreItemToDictionary:(ADTokenCacheItem *)obj
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-    
+
     [dict setObject:ObjectOrNull(obj.resource) forKey:@"resource"];
     [dict setObject:ObjectOrNull(obj.authority) forKey:@"authority"];
     [dict setObject:ObjectOrNull(obj.clientId) forKey:@"clientId"];
     [dict setObject:ObjectOrNull(obj.accessToken) forKey:@"accessToken"];
     [dict setObject:ObjectOrNull(obj.accessTokenType) forKey:@"accessTokenType"];
     [dict setObject:[NSNumber numberWithBool:obj.refreshToken != nil] forKey:@"isMultipleResourceRefreshToken"];
-    
+
     if (obj.expiresOn) // could be nil
     {
         [dict setObject:[NSNumber numberWithDouble:[obj.expiresOn timeIntervalSince1970] * 1000] forKey:@"expiresOn"];
     }
-    
+
     if (obj.userInformation)
     {
         [dict setObject:[CordovaAdalUtils ADUserInformationToDictionary:obj.userInformation] forKey:@"userInfo"];
         [dict setObject:ObjectOrNull([obj.userInformation tenantId]) forKey:@"tenantId"];
         [dict setObject:ObjectOrNull(obj.userInformation.rawIdToken) forKey:@"idToken"];
     }
-    
+
     return dict;
 }
 
@@ -87,10 +87,10 @@ static id ObjectOrNull(id object)
     if (userId && [userId length] > 0)
     {
         ADAuthenticationError *error;
-        
+
         ADKeychainTokenCache* cacheStore = [ADKeychainTokenCache new];
         NSArray *cacheItems = [cacheStore allItems:&error];
-        
+
         if (error == nil)
         {
             for (ADTokenCacheItem *obj in cacheItems)
@@ -139,7 +139,13 @@ static NSString* stringForADErrorCode(NSInteger code)
                                  [NSNumber numberWithInt:502]:  @"AD_ERROR_TOKENBROKER_RESPONSE_HASH_MISMATCH",
                                  [NSNumber numberWithInt:503]:  @"AD_ERROR_TOKENBROKER_RESPONSE_NOT_RECEIVED",
                                  [NSNumber numberWithInt:504]:  @"AD_ERROR_TOKENBROKER_FAILED_TO_CREATE_KEY",
-                                 [NSNumber numberWithInt:505]:  @"AD_ERROR_TOKENBROKER_DECRYPTION_FAILED"};
+                                 [NSNumber numberWithInt:505]:  @"AD_ERROR_TOKENBROKER_DECRYPTION_FAILED",
+                                 [NSNumber numberWithInt:506]:  @"AD_ERROR_TOKENBROKER_NOT_A_BROKER_RESPONSE",
+                                 [NSNumber numberWithInt:507]:  @"AD_ERROR_TOKENBROKER_NO_RESUME_STATE",
+                                 [NSNumber numberWithInt:508]:  @"AD_ERROR_TOKENBROKER_BAD_RESUME_STATE",
+                                 [NSNumber numberWithInt:509]:  @"AD_ERROR_TOKENBROKER_MISMATCHED_RESUME_STATE",
+                                 [NSNumber numberWithInt:510]:  @"AD_ERROR_TOKENBROKER_HASH_MISSING",
+                                 [NSNumber numberWithInt:511]:  @"AD_ERROR_TOKENBROKER_NOT_SUPPORTED_IN_EXTENSION"};
 
     return [errorCodes objectForKey:[NSNumber numberWithInt:(int)code]];
 

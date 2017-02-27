@@ -23,8 +23,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ADAL.h"
-
 @class ADAuthenticationError;
 @class ADAuthenticationResult;
 @class ADTokenCacheItem;
@@ -41,7 +39,7 @@ typedef enum
 {
     /*! Default option. Assumes the assertion provided is of type SAML 1.1. */
     AD_SAML1_1,
-
+    
     /*! Assumes the assertion provided is of type SAML 2. */
     AD_SAML2,
 } ADAssertionType;
@@ -61,14 +59,14 @@ typedef enum
         AD_ERROR_USER_INPUT_NEEDED.
      */
     AD_PROMPT_AUTO,
-
+    
     /*!
         The user will be prompted explicitly for credentials, consent or any other prompts, except when the
         user has Azure Authenticator installed. This option is useful in multi-user scenarios. Example is
         authenticating for the same e-mail service with different user.
      */
     AD_PROMPT_ALWAYS,
-
+    
     /*!
         Re-authorizes (through displaying webview) the resource usage, making sure that the resulting access
         token contains updated claims. If user logon cookies are available, the user will not be asked for
@@ -76,7 +74,7 @@ typedef enum
         prompt=refresh_session as an extra query parameter during the authorization.
      */
     AD_PROMPT_REFRESH_SESSION,
-
+    
     /*!
         If Azure Authenticator is installed forces it to prompt the user, otherwise has the same behavior as
         AD_PROMPT_ALWAYS.
@@ -95,13 +93,13 @@ typedef enum
      This is the default option.
      */
     AD_CREDENTIALS_AUTO,
-
+    
     /*!
      The SDK will present an embedded dialog within the application. It will not invoke external
      application or browser.
      */
     AD_CREDENTIALS_EMBEDDED,
-
+    
 } ADCredentialsType;
 
 @class ADAuthenticationResult;
@@ -109,9 +107,9 @@ typedef enum
 
 /*!
     @class ADAuthenticationContext
-
+ 
     The central class for managing multiple tokens.
-
+ 
     Usage: create one per AAD or ADFS authority. As authority is required, the class cannot be
     used with "new" or the parameterless "init" selectors. Attempt to call
     [ADAuthenticationContext new] or [[ADAuthenticationContext alloc] init] will throw an exception.
@@ -127,7 +125,7 @@ typedef enum
     NSUUID* _correlationId;
 #if __has_feature(objc_arc)
     __weak WebViewType* _webView;
-#else
+#else 
     WebViewType* _webView;
 #endif
 }
@@ -135,12 +133,12 @@ typedef enum
 #if TARGET_OS_IPHONE
 /*!
     Initializes an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param validateAuthority    Specifies if the authority should be validated.
     @param sharedGroup          The keychain sharing group to use for the ADAL token cache (iOS Only)
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 - (id)initWithAuthority:(NSString *)authority
@@ -152,13 +150,13 @@ typedef enum
 #if !TARGET_OS_IPHONE
 /*!
     Initializes an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param validateAuthority    Specifies if the authority should be validated.
     @param delegate             An object conforming to the ADTokenCacheDelegate protocol, this is mandatory
                                 if you wish to persist tokens on OS X.
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 - (id)initWithAuthority:(NSString *)authority
@@ -169,11 +167,11 @@ typedef enum
 
 /*!
     Initializes an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param validateAuthority    Specifies if the authority should be validated.
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 - (id)initWithAuthority:(NSString *)authority
@@ -183,10 +181,10 @@ typedef enum
 
 /*!
     Creates an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 + (ADAuthenticationContext*)authenticationContextWithAuthority:(NSString*)authority
@@ -194,11 +192,11 @@ typedef enum
 
 /*!
     Creates an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param validateAuthority    Specifies if the authority should be validated.
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 + (ADAuthenticationContext*)authenticationContextWithAuthority:(NSString*)authority
@@ -208,11 +206,11 @@ typedef enum
 #if TARGET_OS_IPHONE
 /*!
     Creates an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param sharedGroup          The keychain sharing group to use for the ADAL token cache (iOS Only)
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 + (ADAuthenticationContext*)authenticationContextWithAuthority:(NSString*)authority
@@ -221,12 +219,12 @@ typedef enum
 
 /*!
     Creates an instance of ADAuthenticationContext with the provided parameters.
-
+ 
     @param authority            The AAD or ADFS authority. Example: @"https://login.windows.net/contoso.com"
     @param validateAuthority    Specifies if the authority should be validated.
     @param sharedGroup          The keychain sharing group to use for the ADAL token cache (iOS Only)
     @param error                (Optional) Any extra error details, if the method fails
-
+ 
     @return An instance of ADAuthenticationContext, nil if it fails.
  */
 + (ADAuthenticationContext*)authenticationContextWithAuthority:(NSString*)authority
@@ -242,7 +240,7 @@ typedef enum
 
 /*!
  */
-+ (void)handleBrokerResponse:(NSURL*)response;
++ (BOOL)handleBrokerResponse:(NSURL*)response;
 
 /*! Represents the authority used by the context. */
 @property (readonly) NSString* authority;
@@ -272,11 +270,14 @@ typedef enum
  when needed, leveraging the parentController property. */
 @property (weak) WebViewType* webView;
 
+/*! Enable to return access token with extended lifetime during server outage. */
+@property BOOL extendedLifetimeEnabled;
+
 /*! Follows the OAuth2 protocol (RFC 6749). The function will first look at the cache and automatically check for token
  expiration. Additionally, if no suitable access token is found in the cache, but refresh token is available,
- the function will use the refresh token automatically. If neither of these attempts succeeds, the method will use the provided assertion to get an
+ the function will use the refresh token automatically. If neither of these attempts succeeds, the method will use the provided assertion to get an 
  access token from the service.
-
+ 
  @param samlAssertion: the assertion representing the authenticated user.
  @param assertionType: the assertion type of the user assertion.
  @param resource: the resource whose token is needed.
