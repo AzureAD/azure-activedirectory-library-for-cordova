@@ -35,6 +35,7 @@
     <js-module name="TokenCache" src="www/TokenCache.js"/>
     <js-module name="TokenCacheItem" src="www/TokenCacheItem.js"/>
     <js-module name="UserInfo" src="www/UserInfo.js"/>
+    <js-module name="LogItem" src="www/LogItem.js"/>
 
     <js-module name="AuthenticationSettings" src="www/AuthenticationSettings.js">
         <clobbers target="Microsoft.ADAL.AuthenticationSettings" />

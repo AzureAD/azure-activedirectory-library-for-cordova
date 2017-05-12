@@ -24,4 +24,7 @@
 
 + (ADAuthenticationContext *)getOrCreateAuthContext:(NSString *)authority
                                   validateAuthority:(BOOL)validate;
+
+- (void)setLogger:(CDVInvokedUrlCommand *)command;
+- (void)setLogLevel:(CDVInvokedUrlCommand *) command;
 @end

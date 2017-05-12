@@ -260,6 +260,44 @@
     }];
 }
 
+- (void) setLogger:(CDVInvokedUrlCommand *)command
+{
+   [self.commandDelegate runInBackground:^{
+       [ADLogger setLogCallBack:^(ADAL_LOG_LEVEL logLevel, NSString *message, NSString *additionalInfo, NSInteger errorCode, NSDictionary *userInfo) {
+           NSMutableDictionary *logItem = [[NSMutableDictionary alloc] init];
+
+           [logItem setObject:[NSNumber numberWithInt:logLevel] forKey:@"level"];
+           [logItem setValue:message forKey:@"message"];
+           [logItem setValue:additionalInfo forKey:@"additionalInfo"];
+           [logItem setValue:[NSNumber numberWithInteger:errorCode] forKey:@"errorCode"];
+
+           CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                              messageAsDictionary:logItem];
+           [pluginResult setKeepCallbackAsBool:YES];
+           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+       }];
+   }];
+}
+
+- (void) setLogLevel:(CDVInvokedUrlCommand *)command
+{
+   [self.commandDelegate runInBackground:^{
+       @try {
+           NSNumber *logLevel = [command.arguments objectAtIndex:0];
+           [ADLogger setLevel:[logLevel intValue]];
+           CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+       }
+
+       @catch(ADAuthenticationError* error) {
+           CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                         messageAsDictionary:[CordovaAdalUtils ADAuthenticationErrorToDictionary:error]];
+           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+       }
+   }];
+}
+
 static NSMutableDictionary *existingContexts = nil;
 
 + (ADAuthenticationContext *)getOrCreateAuthContext:(NSString *)authority

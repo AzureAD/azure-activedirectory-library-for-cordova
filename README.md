@@ -166,7 +166,30 @@ logic based on this information. **Important:** code is platform specific, see b
  * Windows: https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/master/src/ADAL.PCL/Constants.cs
 * err.details - Raw error information returned by Apache Cordova bridge and native implementation (if available).
 
+## Logging
+You can configure the plugin to collect log messages from native libraries to help diagnose issues. To configure logging make the following call to set a callback that will be invoked every time when new log message is generated.
+```javascript
+Microsoft.ADAL.AuthenticationSettings.setLogger(function logger(logItem) {
+  ...
+});
+```
+`setLogger` method takes user's logger function, which will be triggered each time with `LogItem` instance when internal logs are received.
+`LogItem` instance includes the following properties:
+* message - A short log message describing the event that occurred
+* additionalMessage - A longer message that contains other details relevant to event (android, iOS)
+* level - The level (number) of the log message. **Important:** level is platform specific, see below for more details:
+  * iOS: https://github.com/AzureAD/azure-activedirectory-library-for-objc/blob/c891135340077046ddd1065bcaaad8dc8d29ea60/ADAL/src/public/ADLogger.h
+  * Android: https://github.com/AzureAD/azure-activedirectory-library-for-android/blob/14794061e6791ea51a162195a8b17735b6a81ec5/adal/src/main/java/com/microsoft/aad/adal/Logger.java
+  * Windows: https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/924ad544439e9b136ccc3cfc5ed9c07a984f3fb9/src/ADAL.PCL/IAdalLogCallback.cs
+* tag - tag for the log message (android)
+* errorCode - An integer error code if the log message is an error (android, iOS)
 
+To set the logging level in your application call
+```javascript
+Microsoft.ADAL.AuthenticationSettings.setLogLevel(0)
+.then(function() {
+  ...
+```
 
 ## Known issues and workarounds
 

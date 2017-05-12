@@ -4,8 +4,13 @@
 
 var checkArgs = require('cordova/argscheck').checkArgs;
 
+var exec = require('cordova/exec');
 var bridge = require('./CordovaBridge');
+var LogItem = require('./LogItem');
 var Deferred = require('./utility').Utility.Deferred;
+if (cordova.platformId === 'windows') {
+    require("cordova/exec/proxy").add("ADAL3WinMDProxy", ADAL3WinMDProxy.Logger);
+}
 
 module.exports = {
 
@@ -26,6 +31,27 @@ module.exports = {
         }
 
         // Broker is handled by system on Windows/iOS
+        var deferred = new Deferred();
+        deferred.resolve();
+        return deferred;
+    },
+
+    setLogger: function (userLogFunc) {
+        exec(
+            function(res) {
+                userLogFunc(new LogItem(res));
+            },
+            null,
+            cordova.platformId === 'windows' ? 'ADAL3WinMDProxy' : 'ADALProxy',
+            "setLogger",
+            []);
+    },
+
+    setLogLevel: function(logLevel) {
+        if (cordova.platformId === 'android' || cordova.platformId === 'ios') {
+            return bridge.executeNativeMethod('setLogLevel', [logLevel]);
+        }
+
         var deferred = new Deferred();
         deferred.resolve();
         return deferred;

@@ -20,6 +20,7 @@ import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -47,6 +48,7 @@ public class CordovaAdalPlugin extends CordovaPlugin {
     private final Hashtable<String, AuthenticationContext> contexts = new Hashtable<String, AuthenticationContext>();
     private AuthenticationContext currentContext;
     private CallbackContext callbackContext;
+    private CallbackContext loggerCallbackContext;
 
     public CordovaAdalPlugin() {
 
@@ -133,6 +135,12 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
             boolean useBroker = args.getBoolean(0);
             return setUseBroker(useBroker);
+        } else if (action.equals("setLogger")) {
+            this.loggerCallbackContext = callbackContext;
+            return setLogger();
+        } else if (action.equals("setLogLevel")) {
+            Integer logLevel = args.getInt(0);
+            return setLogLevel(logLevel);
         }
 
         return false;
@@ -291,6 +299,48 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         }
 
         callbackContext.success();
+        return true;
+    }
+
+
+    private boolean setLogLevel(Integer logLevel) {
+        try {
+            Logger.LogLevel level = Logger.LogLevel.values()[logLevel];
+            Logger.getInstance().setLogLevel(level);
+        }
+        catch (Exception e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
+            return true;
+        }
+
+        callbackContext.success();
+        return true;
+    }
+
+    private boolean setLogger() {
+        Logger.getInstance().setExternalLogger(new Logger.ILogger() {
+            @Override
+            public void Log(String tag, String message, String additionalMessage, Logger.LogLevel level, ADALError errorCode) {
+
+                JSONObject logItem = new JSONObject();
+                try {
+                    logItem.put("tag", tag);
+                    logItem.put("additionalMessage", additionalMessage);
+                    logItem.put("message", message);
+                    logItem.put("level", level.ordinal());
+                    logItem.put("errorCode", errorCode.ordinal());
+                }
+
+                catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                PluginResult logResult = new PluginResult(PluginResult.Status.OK, logItem);
+                logResult.setKeepCallback(true);
+                loggerCallbackContext.sendPluginResult(logResult);
+            }
+        });
+
         return true;
     }
 

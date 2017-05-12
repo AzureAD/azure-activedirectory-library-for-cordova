@@ -361,6 +361,14 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         });
     });
 
+    createActionButton("setLogger", function () {
+        var log = function (res) {
+            console.log(res);
+        }
+
+        Microsoft.ADAL.AuthenticationSettings.setLogger(log);
+    });
+
     createActionButton("Acquire token with userId", function () {
 
         if (!context) {
@@ -529,8 +537,20 @@ module.exports.defineManualTests = function (contentEl, createActionButton) {
         });
     });
 
-    if (cordova.platformId === 'android') { // android specific logic
+     if (cordova.platformId === "android" || cordova.platformId === "ios") {
+        createActionButton("setLogLevel", function () {
+            // set verbose level for logging
+            var verboseCode = cordova.platformId === 'android' ? 3 : 4;
+            Microsoft.ADAL.AuthenticationSettings.setLogLevel(verboseCode)
+            .then(function (res) {
+                contentEl.innerHTML = res;
+            }, function (err) {
+                contentEl.innerHTML = err ? err.message : "";
+            });
+        });
+   }
 
+    if (cordova.platformId === 'android') { // android specific logic
         createActionButton("setUseBroker(true)", function () {
             Microsoft.ADAL.AuthenticationSettings.setUseBroker(true)
             .then(function (res) {

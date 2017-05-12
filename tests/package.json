@@ -1,0 +1,14 @@
+{
+  "name": "cordova-plugin-ms-adal-tests",
+  "version": "0.9.0",
+  "description": "",
+  "cordova": {
+    "id": "cordova-plugin-ms-adal-tests",
+    "platforms": []
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "",
+  "license": "Apache 2.0"
+}
