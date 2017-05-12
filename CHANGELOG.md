@@ -1,3 +1,10 @@
+0.10.0 - May 12, 2017
+* Add logger for consuming internal logs from native libraries
+* Bump .NET SDK version to 3.13.8
+* Bump iOS version to 2.3.1
+* Resolve build issue with AZME plugin
+* Fix Appveyor CI
+
 0.9.0 - February 8, 2017
 * Use alternative sources to populate 'userInfo' in case if 'idToken' is not defined
 * Make AuthenticationSettings.setUseBroker available across platforms
