@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-ms-adal",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Provides Microsoft Azure Active Directory (ADAL) OAuth client.",
   "cordova": {
     "id": "cordova-plugin-ms-adal",
@@ -28,6 +28,11 @@
         "cordova": ">=5.4.0"
       },
       "0.10.0": {
+        "cordova-android": ">=4.1.0",
+        "cordova-windows": ">=4.1.0",
+        "cordova": ">=5.4.0"
+      },
+      "0.10.1": {
         "cordova-android": ">=4.1.0",
         "cordova-windows": ">=4.1.0",
         "cordova": ">=5.4.0"
