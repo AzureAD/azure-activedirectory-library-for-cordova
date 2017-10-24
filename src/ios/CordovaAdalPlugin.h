@@ -12,6 +12,8 @@
 // Implements Apache Cordova plugin for Microsoft Azure ADAL
 @interface CordovaAdalPlugin : CDVPlugin
 
+- (void)pluginInitialize;
+
 // AuthenticationContext methods
 - (void)createAsync:(CDVInvokedUrlCommand *)command;
 - (void)acquireTokenAsync:(CDVInvokedUrlCommand *)command;
@@ -21,9 +23,6 @@
 - (void)tokenCacheClear:(CDVInvokedUrlCommand *)command;
 - (void)tokenCacheReadItems:(CDVInvokedUrlCommand *)command;
 - (void)tokenCacheDeleteItem:(CDVInvokedUrlCommand *)command;
-
-+ (ADAuthenticationContext *)getOrCreateAuthContext:(NSString *)authority
-                                  validateAuthority:(BOOL)validate;
 
 - (void)setLogger:(CDVInvokedUrlCommand *)command;
 - (void)setLogLevel:(CDVInvokedUrlCommand *) command;
