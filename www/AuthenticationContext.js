@@ -8,6 +8,7 @@ var bridge = require('./CordovaBridge');
 var Deferred = require('./utility').Utility.Deferred;
 var AuthenticationResult = require('./AuthenticationResult');
 var TokenCache = require('./TokenCache');
+var BrokerUtils = require('./BrokerUtils');
 
 /**
  * Constructs context to use with known authority to get the token. It reuses existing context
@@ -33,6 +34,7 @@ function AuthenticationContext(authority, validateAuthority) {
     this.authority = authority;
     this.validateAuthority = validateAuthority;
     this.tokenCache = new TokenCache(this);
+    this.brokerUtils = new BrokerUtils(this);
 }
 
 /**

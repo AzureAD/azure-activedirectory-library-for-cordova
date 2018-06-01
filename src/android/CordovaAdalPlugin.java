@@ -155,6 +155,12 @@ public class CordovaAdalPlugin extends CordovaPlugin {
 
             boolean useBroker = args.getBoolean(0);
             return setUseBroker(useBroker);
+        } else if (action.equals("getBrokerRedirectUri")){
+
+            String authority = args.getString(0);
+            boolean validateAuthority = args.optBoolean(1, true);
+            return getBrokerRedirectUri(authority, validateAuthority);
+
         } else if (action.equals("setLogger")) {
             this.loggerCallbackContext = callbackContext;
             return setLogger();
@@ -301,6 +307,20 @@ public class CordovaAdalPlugin extends CordovaPlugin {
         return true;
     }
 
+    private boolean getBrokerRedirectUri(String authority, boolean validateAuthority) {
+
+        final AuthenticationContext authContext;
+        try{
+            authContext = getOrCreateContext(authority, validateAuthority);
+			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, authContext.getRedirectUriForBroker()));
+			callbackContext.success();
+			return true;
+        } catch (Exception e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getMessage()));
+            return true;
+        }
+    }
+	
     private boolean setUseBroker(boolean useBroker) {
 
         try {
