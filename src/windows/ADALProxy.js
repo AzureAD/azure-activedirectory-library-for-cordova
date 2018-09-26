@@ -133,6 +133,7 @@ var ADALProxy = {
             var userId = args[5];
             var extraQueryParameters = args[6];
             var userIdentifier;
+            var defaultPromptBehavior = extraQueryParameters != undefined && extraQueryParameters.indexOf('prompt=') > -1 ? Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.auto : Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always;
 
             ADALProxy.getOrCreateCtx(authority, validateAuthority).then(function (context) {
                 userIdentifier = getUserIdentifier(context, userId);
@@ -179,13 +180,13 @@ var ADALProxy = {
                         // Try to SSO first
                         context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.never, userIdentifier, extraQueryParameters).then(function (res) {
                             handleAuthResult(win, function() {
-                                context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
+                                context.acquireTokenAsync(resourceUrl, clientId, Windows.Security.Authentication.Web.WebAuthenticationBroker.getCurrentApplicationCallbackUri(), defaultPromptBehavior, userIdentifier, extraQueryParameters).then(function (res) {
                                     handleAuthResult(win, fail, res);
                                 }, fail);
                             }, res);
                         }, fail);
                     } else {
-                        context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior.always, userIdentifier, extraQueryParameters).then(function (res) {
+                        context.acquireTokenAsync(resourceUrl, clientId, redirectUrl, defaultPromptBehavior, userIdentifier, extraQueryParameters).then(function (res) {
                             handleAuthResult(win, fail, res);
                         }, fail);
                     }

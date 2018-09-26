@@ -40,6 +40,8 @@ import static com.microsoft.aad.adal.SimpleSerialization.tokenItemToJSON;
 public class CordovaAdalPlugin extends CordovaPlugin {
 
     private static final PromptBehavior SHOW_PROMPT_ALWAYS = PromptBehavior.Always;
+    private static final PromptBehavior SHOW_PROMPT_AUTO = PromptBehavior.Auto;
+
 
     private static final int GET_ACCOUNTS_PERMISSION_REQ_CODE = 0;
     private static final String PERMISSION_DENIED_ERROR =  "Permissions denied";
@@ -207,7 +209,7 @@ public class CordovaAdalPlugin extends CordovaPlugin {
                 clientId,
                 redirectUrl,
                 userId,
-                SHOW_PROMPT_ALWAYS,
+                (extraQueryParams != null && extraQueryParams.contains("prompt=")) ? SHOW_PROMPT_AUTO : SHOW_PROMPT_ALWAYS,
                 extraQueryParams,
                 new DefaultAuthenticationCallback(callbackContext));
     }
